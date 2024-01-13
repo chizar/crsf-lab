@@ -66,75 +66,75 @@ while True:
             changes = True
 
         channel = 2
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             # print('no channel2 byte')
             continue
-        new_ch02 = received_data[i + channel + 2]
+        new_ch02 = channelsFrame[channel]
         # print(f'channel2: {ch02} - ' + hex(ch02))
         if new_ch02 != ch02:
             ch02 = new_ch02
             changes = True
 
         channel = 3
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             continue
-        new_ch03 = received_data[i + channel + 2]
+        new_ch03 = channelsFrame[channel]
         if new_ch03 != ch03:
             ch03 = new_ch03
             changes = True
 
         channel = 4
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             continue
-        new_ch04 = received_data[i + channel + 2]
+        new_ch04 = channelsFrame[channel]
         if new_ch04 != ch04:
             ch04 = new_ch04
             changes = True
 
         channel = 5
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             continue
-        new_ch05 = received_data[i + channel + 2]
+        new_ch05 = channelsFrame[channel]
         if new_ch05 != ch05:
             ch05 = new_ch05
             changes = True
 
         channel = 6
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             continue
-        new_ch06 = received_data[i + channel + 2]
+        new_ch06 = channelsFrame[channel]
         if new_ch06 != ch06:
             ch06 = new_ch06
             changes = True
 
         channel = 7
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             continue
-        new_ch07 = received_data[i + channel + 2]
+        new_ch07 = channelsFrame[channel]
         if new_ch07 != ch07:
             ch07 = new_ch07
             changes = True
 
         channel = 8
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             continue
-        new_ch08 = received_data[i + channel + 2]
+        new_ch08 = channelsFrame[channel]
         if new_ch08 != ch08:
             ch08 = new_ch08
             changes = True
 
         channel = 9
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             continue
-        new_ch09 = received_data[i + channel + 2]
+        new_ch09 = channelsFrame[channel]
         if new_ch09 != ch09:
             ch09 = new_ch09
             changes = True
 
         channel = 10
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             continue
-        new_ch10 = received_data[i + channel + 2]
+        new_ch10 = channelsFrame[channel]
         if new_ch10 != ch10:
             ch10 = new_ch10
             changes = True
