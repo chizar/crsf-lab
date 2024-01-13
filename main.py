@@ -52,10 +52,10 @@ while True:
         if payloadType != 0x16:
             continue
 
-        channelsFrameBytes = received_data[i + 2:]
-
-        if len(channelsFrameBytes) < 22:  # skip incomplete frame
+        if len(received_data) < i + 2 + framelen:  # skip incomplete frame
             continue
+
+        channelsFrameBytes = received_data[i + 2:framelen]
 
         changes = False
 
