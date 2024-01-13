@@ -49,7 +49,9 @@ while True:
             continue
 
         channelsFrame = received_data[i+2:]
-        print(f'frame length {framelen}; fact length ', len(channelsFrame))
+
+        if len(channelsFrame) < 22:  # skip incomplete frame
+            continue
 
         changes = False
         channels = ByteSwapped(
