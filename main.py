@@ -49,11 +49,12 @@ while True:
             continue
 
         channelsFrame = received_data[i+2:]
+
         changes = False
-        #
-        # channels = ByteSwapped(
-        #     BitStruct("channels" / Array(16, BitsInteger(11)))
-        # )
+        channels = ByteSwapped(
+            BitStruct("channels" / Array(16, BitsInteger(11)))
+        )
+        channels.parse(channelsFrame)
 
         channel = 1
         if len(channelsFrame) <= channel:
