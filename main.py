@@ -20,6 +20,10 @@ ch08 = 0
 ch09 = 0
 ch10 = 0
 
+channelsFrameStructure = ByteSwapped(
+    BitStruct("channels" / Array(16, BitsInteger(11)))
+)
+
 while True:
     received_data = ser.read()  # read serial port
     sleep(0.03)
@@ -48,102 +52,100 @@ while True:
         if payloadType != 0x16:
             continue
 
-        channelsFrame = received_data[i+2:]
+        channelsFrameBytes = received_data[i + 2:]
 
-        if len(channelsFrame) < 22:  # skip incomplete frame
+        if len(channelsFrameBytes) < 22:  # skip incomplete frame
             continue
 
         changes = False
-        channels = ByteSwapped(
-            BitStruct("channels" / Array(16, BitsInteger(11)))
-        )
-        channels.parse(channelsFrame)
+
+        channels = channelsFrameStructure.parse(channelsFrameBytes)
 
         channel = 1
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             # print('no channel1 byte')
             continue
-        new_ch01 = channelsFrame[channel]
+        new_ch01 = channelsFrameBytes[channel]
         # print(f'channel1: {ch01} - ' + hex(ch01))
         if new_ch01 != ch01:
             ch01 = new_ch01
             changes = True
 
         channel = 2
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             # print('no channel2 byte')
             continue
-        new_ch02 = channelsFrame[channel]
+        new_ch02 = channelsFrameBytes[channel]
         # print(f'channel2: {ch02} - ' + hex(ch02))
         if new_ch02 != ch02:
             ch02 = new_ch02
             changes = True
 
         channel = 3
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             continue
-        new_ch03 = channelsFrame[channel]
+        new_ch03 = channelsFrameBytes[channel]
         if new_ch03 != ch03:
             ch03 = new_ch03
             changes = True
 
         channel = 4
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             continue
-        new_ch04 = channelsFrame[channel]
+        new_ch04 = channelsFrameBytes[channel]
         if new_ch04 != ch04:
             ch04 = new_ch04
             changes = True
 
         channel = 5
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             continue
-        new_ch05 = channelsFrame[channel]
+        new_ch05 = channelsFrameBytes[channel]
         if new_ch05 != ch05:
             ch05 = new_ch05
             changes = True
 
         channel = 6
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             continue
-        new_ch06 = channelsFrame[channel]
+        new_ch06 = channelsFrameBytes[channel]
         if new_ch06 != ch06:
             ch06 = new_ch06
             changes = True
 
         channel = 7
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             continue
-        new_ch07 = channelsFrame[channel]
+        new_ch07 = channelsFrameBytes[channel]
         if new_ch07 != ch07:
             ch07 = new_ch07
             changes = True
 
         channel = 8
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             continue
-        new_ch08 = channelsFrame[channel]
+        new_ch08 = channelsFrameBytes[channel]
         if new_ch08 != ch08:
             ch08 = new_ch08
             changes = True
 
         channel = 9
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             continue
-        new_ch09 = channelsFrame[channel]
+        new_ch09 = channelsFrameBytes[channel]
         if new_ch09 != ch09:
             ch09 = new_ch09
             changes = True
 
         channel = 10
-        if len(channelsFrame) <= channel:
+        if len(channelsFrameBytes) <= channel:
             continue
-        new_ch10 = channelsFrame[channel]
+        new_ch10 = channelsFrameBytes[channel]
         if new_ch10 != ch10:
             ch10 = new_ch10
             changes = True
 
         if changes:
-            print(f'CH01:{ch01:03d} CH02:{ch02:03d} CH03:{ch03:03d} CH04:{ch04:03d} CH05:{ch05:03d} CH06:{ch06:03d} CH07:{ch07:03d} CH08:{ch08:03d} CH09:{ch09:03d} CH10:{ch10:03d}')
+            print(f'CH01:{channels.channels[0]:03d} CH02:{ch02:03d} CH03:{ch03:03d} CH04:{ch04:03d} CH05:{ch05:03d} CH06:{ch06:03d} CH07:{ch07:03d} CH08:{ch08:03d} CH09:{ch09:03d} CH10:{ch10:03d}')
 
 
