@@ -41,9 +41,24 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
             oldChannels[12] == channels[12] and
             oldChannels[13] == channels[13] and
             oldChannels[14] == channels[14] and
-            oldChannels[15] == channels[15] and
-            oldChannels[16] == channels[16]):
+            oldChannels[15] == channels[15]):
         return
+    oldChannels[0] = channels[0]
+    oldChannels[1] = channels[1]
+    oldChannels[2] = channels[2]
+    oldChannels[3] = channels[3]
+    oldChannels[4] = channels[4]
+    oldChannels[5] = channels[5]
+    oldChannels[6] = channels[6]
+    oldChannels[7] = channels[7]
+    oldChannels[8] = channels[8]
+    oldChannels[9] = channels[9]
+    oldChannels[10] = channels[10]
+    oldChannels[11] = channels[11]
+    oldChannels[12] = channels[12]
+    oldChannels[13] = channels[13]
+    oldChannels[14] = channels[14]
+    oldChannels[15] = channels[15]
 
     print(f'CH01:{channels[0]:05d} '
           f'CH02:{channels[1]:05d} '
@@ -61,6 +76,7 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
           f'CH14:{channels[13]:05d} '
           f'CH15:{channels[14]:05d} '
           f'CH16:{channels[15]:05d}')
+
 
 
 crsf_parser = CRSFParser(print_frame)
