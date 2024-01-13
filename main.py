@@ -16,9 +16,12 @@ while True:
     # print(len(received_data))
     # ser.write(received_data)  # transmit data serially
     # 0xC8
-    for b in received_data:
-        if b == 0xC8:
-            print(b)
+    # for i = 0 to len(received_data):
+    for i in range(len(received_data)):
+        if received_data[i] == 0xC8:
+            print('0xC8 byte detected: Destination address or "sync" byte: Going to the flight controller')
+            framelen = received_data[i+1]
+            print(f'frame length ${framelen}')
 
 
 
