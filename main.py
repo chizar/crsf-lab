@@ -1,7 +1,12 @@
 import serial
+import sys
 from time import sleep
 
-ser = serial.Serial("/dev/ttyS0", 115200)  # Open port with baud rate
+print('args', sys.argv)
+baud = 115200
+if len(sys.argv) > 1:
+    baud = sys.argv[1]
+ser = serial.Serial("/dev/ttyS0", baud)  # Open port with baud rate
 while True:
     received_data = ser.read()  # read serial port
     sleep(0.03)
