@@ -158,6 +158,12 @@ while True:
                   f'CH07:{channels.channels[6]:05d} '
                   f'CH08:{channels.channels[7]:05d} '
                   f'CH09:{channels.channels[8]:05d} '
-                  f'CH10:{channels.channels[9]:05d}')
+                  f'CH10:{channels.channels[9]:05d} '
+                  f'CH11:{channels.channels[10]:05d} '
+                  f'CH12:{channels.channels[11]:05d} '
+                  f'CH13:{channels.channels[12]:05d} '
+                  f'CH14:{channels.channels[13]:05d} '
+                  f'CH15:{channels.channels[14]:05d} '
+                  f'CH16:{channels.channels[15]:05d}')
 
 
