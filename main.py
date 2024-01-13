@@ -1,16 +1,22 @@
-from operator import contains
 from typing import Container
 from crsf_parser import CRSFParser, PacketValidationStatus
 from serial import Serial
 import sys
 
 from crsf_parser.payloads import PacketsTypes
-from crsf_parser.handling import crsf_build_frame
+import sys
+from typing import Container
 
+from serial import Serial
+
+from crsf_parser import CRSFParser, PacketValidationStatus
+from crsf_parser.payloads import PacketsTypes
 
 baud = 425000  #420000?
 if len(sys.argv) > 1:
     baud = sys.argv[1]
+
+oldChannels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 def print_frame(frame: Container, status: PacketValidationStatus) -> None:
     if status != PacketValidationStatus.VALID:
@@ -19,6 +25,25 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
         return
 
     channels = frame.payload.channels
+
+    if (oldChannels[0] == channels[0] and
+            oldChannels[1] == channels[1] and
+            oldChannels[2] == channels[2] and
+            oldChannels[3] == channels[3] and
+            oldChannels[4] == channels[4] and
+            oldChannels[5] == channels[5] and
+            oldChannels[6] == channels[6] and
+            oldChannels[7] == channels[7] and
+            oldChannels[8] == channels[8] and
+            oldChannels[9] == channels[9] and
+            oldChannels[10] == channels[10] and
+            oldChannels[11] == channels[11] and
+            oldChannels[12] == channels[12] and
+            oldChannels[13] == channels[13] and
+            oldChannels[14] == channels[14] and
+            oldChannels[15] == channels[15] and
+            oldChannels[16] == channels[16]):
+        return
 
     print(f'CH01:{channels[0]:05d} '
           f'CH02:{channels[1]:05d} '
@@ -40,10 +65,9 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
 
 crsf_parser = CRSFParser(print_frame)
 
-with Serial("/dev/ttyS0", baud) as ser:
+with Serial("/dev/ttyS0", baud, timeout=1) as ser:
     inputByteArray = bytearray()
     while True:
         values = ser.read(100)
         inputByteArray.extend(values)
         crsf_parser.parse_stream(inputByteArray)
-        print(len(inputByteArray))
