@@ -57,6 +57,9 @@ while True:
 
         channelsFrameBytes = received_data[i + 2:framelen]
 
+        if len(channelsFrameBytes) < 22:  # skip incomplete frame
+            continue
+
         changes = False
 
         channels = channelsFrameStructure.parse(channelsFrameBytes)
