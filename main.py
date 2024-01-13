@@ -146,6 +146,15 @@ while True:
             changes = True
 
         if changes:
-            print(f'CH01:{channels.channels[0]:03d} CH02:{ch02:03d} CH03:{ch03:03d} CH04:{ch04:03d} CH05:{ch05:03d} CH06:{ch06:03d} CH07:{ch07:03d} CH08:{ch08:03d} CH09:{ch09:03d} CH10:{ch10:03d}')
+            print(f'CH01:{channels.channels[0]:05d} '
+                  f'CH02:{channels.channels[1]:05d} '
+                  f'CH03:{channels.channels[2]:05d} '
+                  f'CH04:{channels.channels[3]:05d} '
+                  f'CH05:{channels.channels[4]:05d} '
+                  f'CH06:{channels.channels[5]:05d} '
+                  f'CH07:{channels.channels[6]:05d} '
+                  f'CH08:{channels.channels[7]:05d} '
+                  f'CH09:{channels.channels[8]:05d} '
+                  f'CH10:{channels.channels[9]:05d}')
 
 
