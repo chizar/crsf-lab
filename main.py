@@ -1,6 +1,7 @@
-import serial
 import sys
 from time import sleep
+
+import serial
 
 print('args', sys.argv)
 baud = 115200
@@ -21,11 +22,17 @@ while True:
         if received_data[i] == 0xC8:
             print('0xC8 byte detected: Destination address or "sync" byte: Going to the flight controller')
 
-            if len(received_data) > i+1:
-                framelen = received_data[i+1]
-                print(f'frame length {framelen}')
-            else:
-                print('no frame length ')
+            if len(received_data) <= i + 1:
+                print('no frame length')
+                continue
+            framelen = received_data[i+1]
+            print(f'frame length {framelen}')
+
+            if len(received_data) <= i + 2:
+                print('no type byte')
+                continue
+            type = received_data[i+2]
+            print(f'type: {type} - ' + hex(type))
 
 
 
