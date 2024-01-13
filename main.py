@@ -62,6 +62,7 @@ while True:
             ch02 = new_ch02
             changes = True
 
-        print(f'CH01:{ch01:03d} CH02:{ch02:03d}')
+        if changes:
+            print(f'CH01:{ch01:03d} CH02:{ch02:03d}')
 
 
