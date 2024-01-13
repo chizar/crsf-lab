@@ -58,6 +58,6 @@ while True:
 
         if new_ch02 != ch02:
             ch02 = new_ch02
-            print(f'CH02 {ch02}' + hex(ch02))
+            print(f'CH02 {ch02} - ' + hex(ch02))
 
 
