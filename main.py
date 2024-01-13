@@ -1,5 +1,6 @@
 import sys
 from time import sleep
+from construct import (BitsInteger, ByteSwapped, BitStruct, Array)
 
 import serial
 
@@ -47,13 +48,18 @@ while True:
         if payloadType != 0x16:
             continue
 
+        channelsFrame = received_data[i+2:]
         changes = False
+        #
+        # channels = ByteSwapped(
+        #     BitStruct("channels" / Array(16, BitsInteger(11)))
+        # )
 
         channel = 1
-        if len(received_data) <= i + channel + 2:
+        if len(channelsFrame) <= channel:
             # print('no channel1 byte')
             continue
-        new_ch01 = received_data[i + channel + 2]
+        new_ch01 = channelsFrame[channel]
         # print(f'channel1: {ch01} - ' + hex(ch01))
         if new_ch01 != ch01:
             ch01 = new_ch01
@@ -134,9 +140,8 @@ while True:
             changes = True
 
         if changes:
+            channels.parse()
+
             print(f'CH01:{ch01:03d} CH02:{ch02:03d} CH03:{ch03:03d} CH04:{ch04:03d} CH05:{ch05:03d} CH06:{ch06:03d} CH07:{ch07:03d} CH08:{ch08:03d} CH09:{ch09:03d} CH10:{ch10:03d}')
-            print(type(received_data))
-            print(type(received_data[i]))
-            print(type(new_ch10))
 
 
