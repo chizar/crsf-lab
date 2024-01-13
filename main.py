@@ -49,6 +49,7 @@ while True:
             continue
 
         channelsFrame = received_data[i+2:]
+        print(f'frame length {framelen}; fact length ', len(channelsFrame))
 
         changes = False
         channels = ByteSwapped(
