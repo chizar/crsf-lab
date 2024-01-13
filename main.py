@@ -54,10 +54,10 @@ while True:
 
         if new_ch01 != ch01:
             ch01 = new_ch01
-            print(f'CH01 {ch01}')
+            print(f'CH01 {ch01} - ' + hex(ch01))
 
         if new_ch02 != ch02:
             ch02 = new_ch02
-            print(f'CH02 {ch02}')
+            print(f'CH02 {ch02}' + hex(ch02))
 
 
