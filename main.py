@@ -8,14 +8,14 @@ while True:
     data_left = ser.inWaiting()  # check for remaining byte
     received_data += ser.read(data_left)
     # print (received_data)                   #print received data
-    print(len(received_data))
+    # print(len(received_data))
     # ser.write(received_data)  # transmit data serially
     # 0xC8
     for b in received_data:
         if b == 0xC8:
             print(b)
 
-    print(" ---- ")
+
 
 
 
