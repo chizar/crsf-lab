@@ -13,29 +13,34 @@ if len(sys.argv) > 1:
     baud = sys.argv[1]
 
 def print_frame(frame: Container, status: PacketValidationStatus) -> None:
-    print(
-        f"""
-    {status}
-    {frame}
-    """
-    )
+    if status != PacketValidationStatus.VALID:
+        return
+    if frame.header.type != PacketsTypes.RC_CHANNELS_PACKED:
+        return
+
+    print(f'CH01:{channels.channels[0]:05d} '
+          f'CH02:{channels.channels[1]:05d} '
+          f'CH03:{channels.channels[2]:05d} '
+          f'CH04:{channels.channels[3]:05d} '
+          f'CH05:{channels.channels[4]:05d} '
+          f'CH06:{channels.channels[5]:05d} '
+          f'CH07:{channels.channels[6]:05d} '
+          f'CH08:{channels.channels[7]:05d} '
+          f'CH09:{channels.channels[8]:05d} '
+          f'CH10:{channels.channels[9]:05d} '
+          f'CH11:{channels.channels[10]:05d} '
+          f'CH12:{channels.channels[11]:05d} '
+          f'CH13:{channels.channels[12]:05d} '
+          f'CH14:{channels.channels[13]:05d} '
+          f'CH15:{channels.channels[14]:05d} '
+          f'CH16:{channels.channels[15]:05d}')
 
 
 crsf_parser = CRSFParser(print_frame)
-n = 10
-v = 1
-with Serial("/dev/ttyS0", baud, timeout=2) as ser:
+
+with Serial("/dev/ttyS0", baud) as ser:
     inputByteArray = bytearray()
     while True:
-        # if n == 0:
-        #     n = 10
-        #     # frame = crsf_build_frame(
-        #     #     PacketsTypes.BATTERY_SENSOR,
-        #     #     {"voltage": v, "current": 1, "capacity": 100, "remaining": 100},
-        #     # )
-        #     # v += 1
-        #     # ser.write(frame)
-        # n = n - 1
         values = ser.read(100)
         inputByteArray.extend(values)
         crsf_parser.parse_stream(inputByteArray)
