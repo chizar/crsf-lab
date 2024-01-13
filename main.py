@@ -4,7 +4,7 @@ from time import sleep
 import serial
 
 print('args', sys.argv)
-baud = 115200
+baud = 420000
 if len(sys.argv) > 1:
     baud = sys.argv[1]
 ser = serial.Serial("/dev/ttyS0", baud)  # Open port with baud rate
@@ -39,9 +39,12 @@ while True:
             if len(received_data) <= i + 3:
                 print('no channel1 byte')
                 continue
-
             ch01 = received_data[i + 3]
             print(f'channel1: {ch01} - ' + hex(ch01))
 
-
+            if len(received_data) <= i + 4:
+                print('no channel2 byte')
+                continue
+            ch02 = received_data[i + 4]
+            print(f'channel2: {ch02} - ' + hex(ch02))
 
