@@ -7,7 +7,7 @@ print('args', sys.argv)
 baud = 420000
 if len(sys.argv) > 1:
     baud = sys.argv[1]
-ser = serial.Serial("/dev/ttyS0", baud)  # Open port with baud rate
+ser = serial.Serial("/dev/ttyS0", baud, )  # Open port with baud rate
 ch01 = 0
 ch02 = 0
 
@@ -52,12 +52,16 @@ while True:
         new_ch02 = received_data[i + 4]
         # print(f'channel2: {ch02} - ' + hex(ch02))
 
+        changes = False
+
         if new_ch01 != ch01:
             ch01 = new_ch01
-            print(f'CH01 {ch01} - ' + hex(ch01))
+            changes = True
 
         if new_ch02 != ch02:
             ch02 = new_ch02
-            print(f'CH02 {ch02} - ' + hex(ch02))
+            changes = True
+
+        print(f'CH01:{ch01:03d} CH02:{ch02:03d}')
 
 
