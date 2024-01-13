@@ -18,6 +18,8 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
     if frame.header.type != PacketsTypes.RC_CHANNELS_PACKED:
         return
 
+    channels = frame.payload.channels
+
     print(f'CH01:{channels.channels[0]:05d} '
           f'CH02:{channels.channels[1]:05d} '
           f'CH03:{channels.channels[2]:05d} '
