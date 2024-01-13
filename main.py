@@ -140,8 +140,6 @@ while True:
             changes = True
 
         if changes:
-            channels.parse()
-
             print(f'CH01:{ch01:03d} CH02:{ch02:03d} CH03:{ch03:03d} CH04:{ch04:03d} CH05:{ch05:03d} CH06:{ch06:03d} CH07:{ch07:03d} CH08:{ch08:03d} CH09:{ch09:03d} CH10:{ch10:03d}')
 
 
