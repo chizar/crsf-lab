@@ -93,8 +93,6 @@ class CRSFParser:
                     self._stats.framing_errors += 1
                 del input[0]
         except IndexError:
-            print("IndexError", IndexError)
             return
         except StreamError:
-            print("StreamError", StreamError)
             return
