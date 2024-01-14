@@ -24,6 +24,7 @@ oldChannels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 def print_frame(frame: Container, status: PacketValidationStatus) -> None:
     if status != PacketValidationStatus.VALID:
+        print("invalid pocket")
         return
     if frame.header.type != PacketsTypes.RC_CHANNELS_PACKED:
         return
