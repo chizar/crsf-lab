@@ -25,6 +25,7 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
         print("invalid pocket")
         return
     if frame.header.type != PacketsTypes.RC_CHANNELS_PACKED:
+        print("invalid pocket type")
         return
 
     channels = frame.payload.channels
@@ -45,6 +46,7 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
             oldChannels[13] == channels[13] and
             oldChannels[14] == channels[14] and
             oldChannels[15] == channels[15]):
+        print("no changes")
         return
     oldChannels[0] = channels[0]
     oldChannels[1] = channels[1]
