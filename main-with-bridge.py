@@ -90,7 +90,10 @@ with Serial("/dev/ttyS0", baud, timeout=1) as ser:
     inputByteArray = bytearray()
     while True:
         values = ser.read(size)
+        print("values: ", len(values))
         ser.write(values)
+        print("inputByteArray b: ", len(inputByteArray))
         inputByteArray.extend(values)
+        print("inputByteArray a: ", len(inputByteArray))
         crsf_parser.parse_stream(inputByteArray)
-        print(len(inputByteArray))
+
