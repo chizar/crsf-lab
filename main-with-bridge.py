@@ -12,6 +12,7 @@ parser.add_argument('-b', '--baud', default=1000, type=int, )
 parser.add_argument('-ss', '--serialsize', default=10, type=int)
 parser.add_argument('-bs', '--buffersize', default=256, type=int)
 parser.add_argument('-be', '--bridgeenabled', default=False, type=bool)
+parser.add_argument('-v', '--verbose', default=False, type=bool)
 args = parser.parse_args()
 
 oldChannels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -86,11 +87,14 @@ with Serial("/dev/ttyS0", args.baud, timeout=1) as ser:
     buffer = bytearray()
     while True:
         values = ser.read(args.serialsize)
+
         if args.bridgeenabled:
             ser.write(values)
+
         buffer.extend(values)
 
         if len(buffer) > args.buffersize:
             crsf_parser.parse_stream(buffer)
-            stats = crsf_parser.get_stats()
-            print("stats: ", stats)
+            if args.verbose:
+                stats = crsf_parser.get_stats()
+                print("stats: ", stats)
