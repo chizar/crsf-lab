@@ -16,6 +16,10 @@ baud = 425000  #420000?
 if len(sys.argv) > 1:
     baud = sys.argv[1]
 
+size = 100
+if len(sys.argv) > 2:
+    size = int(sys.argv[2])
+
 oldChannels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 def print_frame(frame: Container, status: PacketValidationStatus) -> None:
@@ -84,6 +88,6 @@ crsf_parser = CRSFParser(print_frame)
 with Serial("/dev/ttyS0", baud, timeout=1) as ser:
     inputByteArray = bytearray()
     while True:
-        values = ser.read(100)
+        values = ser.read(size)
         inputByteArray.extend(values)
         crsf_parser.parse_stream(inputByteArray)
