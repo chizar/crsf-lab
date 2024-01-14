@@ -88,6 +88,7 @@ with Serial("/dev/ttyS0", args.baud) as ser:
             ser.write(values)
 
         buffer.extend(values)
+        print(values)
 
         crsf_parser.parse_stream(buffer)
 

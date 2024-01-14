@@ -1,15 +1,25 @@
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument('-b', '--baud', default=1000, type=int, )
-parser.add_argument('-ss', '--serialsize', default=10, type=int)
-parser.add_argument('-bs', '--buffersize', default=256, type=int)
-args = parser.parse_args()
+SYNC_BYTE_BIN_STRING = b"\xc8"
+SYNC_BYTE = int.from_bytes(SYNC_BYTE_BIN_STRING, byteorder="little")
 
 
-print(args.baud)
-print(args.serialsize)
-print(args.buffersize)
+print(bin(200))
+print(bin(int.from_bytes(b"\xC8\xCC", byteorder="big", signed=False)))
+print(bin(int.from_bytes(b"\xC8\xCC", byteorder="little", signed=False)))
+
+
+
+# import argparse
+#
+# parser = argparse.ArgumentParser()
+# parser.add_argument('-b', '--baud', default=1000, type=int, )
+# parser.add_argument('-ss', '--serialsize', default=10, type=int)
+# parser.add_argument('-bs', '--buffersize', default=256, type=int)
+# args = parser.parse_args()
+#
+#
+# print(args.baud)
+# print(args.serialsize)
+# print(args.buffersize)
 
 # from construct import (BitsInteger, ByteSwapped, BitStruct, Array)
 #

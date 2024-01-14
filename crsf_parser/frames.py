@@ -1,4 +1,5 @@
 from construct import Byte, If, Struct, Const, Int8ub, Switch, Tell, this, Array
+
 from .payloads import (
     PacketsTypes,
     payload_battery_sensor,
@@ -8,8 +9,7 @@ from .payloads import (
 )
 
 SYNC_BYTE_BIN_STRING = b"\xc8"
-# SYNC_BYTE = int.from_bytes(SYNC_BYTE_BIN_STRING, byteorder="big")
-SYNC_BYTE = 0xC8
+SYNC_BYTE = int.from_bytes(SYNC_BYTE_BIN_STRING, byteorder="big")
 
 crsf_header = Struct(
     "sync_byte" / Const(SYNC_BYTE_BIN_STRING),
