@@ -1,4 +1,5 @@
 import sys
+import argparse
 from typing import Container
 
 from serial import Serial
@@ -6,17 +7,12 @@ from serial import Serial
 from crsf_parser import CRSFParser, PacketValidationStatus
 from crsf_parser.payloads import PacketsTypes
 
-baud = 1000  #420000?
-if len(sys.argv) > 1:
-    baud = sys.argv[1]
-
-size = 10
-if len(sys.argv) > 2:
-    size = int(sys.argv[2])
-
-buffersize = 256
-if len(sys.argv) > 3:
-    buffersize = int(sys.argv[3])
+parser = argparse.ArgumentParser()
+parser.add_argument('-b', '--baud', default=1000, type=int, )
+parser.add_argument('-ss', '--serialsize', default=10, type=int)
+parser.add_argument('-bs', '--buffersize', default=256, type=int)
+parser.add_argument('-be', '--bridgeenabled', default=False, type=bool)
+args = parser.parse_args()
 
 oldChannels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
@@ -86,14 +82,15 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
 
 crsf_parser = CRSFParser(print_frame)
 
-with Serial("/dev/ttyS0", baud, timeout=1) as ser:
+with Serial("/dev/ttyS0", args.baud, timeout=1) as ser:
     buffer = bytearray()
     while True:
-        values = ser.read(size)
-        ser.write(values)
+        values = ser.read(args.serialsize)
+        if args.bridgeenabled:
+            ser.write(values)
         buffer.extend(values)
 
-        if len(buffer) > buffersize:
+        if len(buffer) > args.buffersize:
             crsf_parser.parse_stream(buffer)
             stats = crsf_parser.get_stats()
             print("stats: ", stats)
