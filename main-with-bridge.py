@@ -94,6 +94,5 @@ with Serial("/dev/ttyS0", baud, timeout=1) as ser:
         buffer.extend(values)
 
         if len(buffer) > buffersize:
-            print("buffersize ", len(buffer))
             crsf_parser.parse_stream(buffer)
-            buffer = bytearray()
+            # buffer = bytearray()
