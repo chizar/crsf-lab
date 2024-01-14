@@ -10,3 +10,4 @@ with Serial("/dev/ttyS0", baud, timeout=1) as ser:
     while True:
         values = ser.read(100)
         ser.write(values)
+        print(len(values))
