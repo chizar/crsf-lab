@@ -93,3 +93,4 @@ with Serial("/dev/ttyS0", baud, timeout=1) as ser:
         ser.write(values)
         inputByteArray.extend(values)
         crsf_parser.parse_stream(inputByteArray)
+        print(len(inputByteArray))
