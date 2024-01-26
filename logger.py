@@ -17,7 +17,9 @@ with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
     inputByteArray = bytearray()
     while True:
         values = ser.read(args.serialsize)
+        pos = 0
         for byte in values:
+            pos += 1
             if byte == SYNC_BYTE:
                 count += 1
-                print(f'GOT {count} SYNC BYTE')
+                print(f'sync {count} on {pos} position')
