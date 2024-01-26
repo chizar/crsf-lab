@@ -25,7 +25,7 @@ with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
         for byte in values:
             pos += 1
             if byte == SYNC_BYTE:
-                frame = values[pos:26]
+                frame = values[pos:pos+26]
                 frame_size = pos - last_pos
                 last_pos = pos
                 count += 1
