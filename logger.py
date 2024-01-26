@@ -11,10 +11,12 @@ parser.add_argument('-ss', '--serialsize', default=10, type=int)
 args = parser.parse_args()
 
 SYNC_BYTE = 0xC8
-count = 0
 
+iteration = 0
 with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
     inputByteArray = bytearray()
+    count = 0
+    iteration += 0
     while True:
         values = ser.read(args.serialsize)
         size = len(values)
@@ -23,4 +25,4 @@ with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
             pos += 1
             if byte == SYNC_BYTE:
                 count += 1
-                print(f'sync {count} on {pos}. total size {size}')
+                print(f'iteration {iteration:05d}; sync {count} found on {pos}. total size {size}')
