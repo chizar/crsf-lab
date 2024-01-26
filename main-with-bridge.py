@@ -8,7 +8,7 @@ from crsf_parser import CRSFParser, PacketValidationStatus
 from crsf_parser.payloads import PacketsTypes
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-b', '--baud', default=1000, type=int, )
+parser.add_argument('-b', '--baud', default=1000, type=int)
 parser.add_argument('-ss', '--serialsize', default=10, type=int)
 parser.add_argument('-be', '--bridgeenabled', default=False, type=bool)
 parser.add_argument('-v', '--verbose', default=False, type=bool)
