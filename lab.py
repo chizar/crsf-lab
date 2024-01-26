@@ -1,6 +1,6 @@
 
 print(0x18)
-print(0x16)
+print(abs(1000-5000))
 
 # BYTES1 = b"\xC8\xC8"
 # BYTES2 = b"\xCC\xCC"
