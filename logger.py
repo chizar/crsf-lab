@@ -6,6 +6,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--baud', default=1000, type=int)
 parser.add_argument('-t', '--timeout', default=1, type=int)
 parser.add_argument('-ss', '--serialsize', default=10, type=int)
+parser.add_argument('-p', '--port', default="/dev/ttyS0", type=str)
 
 args = parser.parse_args()
 
@@ -17,7 +18,7 @@ last_pos = 0
 
 valuesRest = b""
 
-with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
+with Serial(args.port, args.baud, timeout=args.timeout) as ser:
     inputByteArray = bytearray()
     total = 0
     while True:

@@ -14,6 +14,7 @@ parser.add_argument('-be', '--bridgeenabled', default=False, type=bool)
 parser.add_argument('-v', '--verbose', default=False, type=bool)
 parser.add_argument('-d', '--dump', default=False, type=bool)
 parser.add_argument('-ls', '--logsensitivity', default=50, type=int)
+parser.add_argument('-p', '--port', default="/dev/ttyS0", type=str)
 
 args = parser.parse_args()
 
@@ -82,7 +83,7 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
 
 crsf_parser = CRSFParser(print_frame)
 
-with Serial("/dev/ttyS0", args.baud) as ser:
+with Serial(args.port, args.baud) as ser:
     while True:
         values = ser.read(args.serialsize)
 
