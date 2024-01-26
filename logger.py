@@ -10,6 +10,7 @@ parser.add_argument('-ss', '--serialsize', default=10, type=int)
 args = parser.parse_args()
 
 SYNC_BYTE = 0xC8
+FRAME_SIZE = 25  # frame = 26 - sync byte = 25
 
 iteration = 0
 last_pos = 0
@@ -23,11 +24,11 @@ with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
         size = len(values)
         pos = 0
         for byte in values:
-            pos += 1
             if byte == SYNC_BYTE:
-                frame = values[pos:pos+26]
+                frame = values[pos:pos + FRAME_SIZE]
                 frame_size = pos - last_pos
                 last_pos = pos
                 count += 1
                 print(f'iteration {iteration:05d}; sync {count} found on {pos}, frame size {frame_size}, total size {size}')
                 print(frame)
+            pos += 1
