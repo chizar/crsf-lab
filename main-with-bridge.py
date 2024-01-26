@@ -13,6 +13,7 @@ parser.add_argument('-ss', '--serialsize', default=10, type=int)
 parser.add_argument('-be', '--bridgeenabled', default=False, type=bool)
 parser.add_argument('-v', '--verbose', default=False, type=bool)
 parser.add_argument('-d', '--dump', default=False, type=bool)
+parser.add_argument('-ls', '--logsensitivity', default=50, type=int)
 
 args = parser.parse_args()
 
@@ -26,22 +27,22 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
 
     channels = frame.payload.channels
 
-    if (oldChannels[0] == channels[0] and
-            oldChannels[1] == channels[1] and
-            oldChannels[2] == channels[2] and
-            oldChannels[3] == channels[3] and
-            oldChannels[4] == channels[4] and
-            oldChannels[5] == channels[5] and
-            oldChannels[6] == channels[6] and
-            oldChannels[7] == channels[7] and
-            oldChannels[8] == channels[8] and
-            oldChannels[9] == channels[9] and
-            oldChannels[10] == channels[10] and
-            oldChannels[11] == channels[11] and
-            oldChannels[12] == channels[12] and
-            oldChannels[13] == channels[13] and
-            oldChannels[14] == channels[14] and
-            oldChannels[15] == channels[15]):
+    if (oldChannels[0] - channels[0] < args.logsensitivity and
+            oldChannels[1] - channels[1] < args.logsensitivity and
+            oldChannels[2] - channels[2] < args.logsensitivity and
+            oldChannels[3] - channels[3] < args.logsensitivity and
+            oldChannels[4] - channels[4] < args.logsensitivity and
+            oldChannels[5] - channels[5] < args.logsensitivity and
+            oldChannels[6] - channels[6] < args.logsensitivity and
+            oldChannels[7] - channels[7] < args.logsensitivity and
+            oldChannels[8] - channels[8] < args.logsensitivity and
+            oldChannels[9] - channels[9] < args.logsensitivity and
+            oldChannels[10] - channels[10] < args.logsensitivity and
+            oldChannels[11] - channels[11] < args.logsensitivity and
+            oldChannels[12] - channels[12] < args.logsensitivity and
+            oldChannels[13] - channels[13] < args.logsensitivity and
+            oldChannels[14] - channels[14] < args.logsensitivity and
+            oldChannels[15] - channels[15] < args.logsensitivity):
         return
     oldChannels[0] = channels[0]
     oldChannels[1] = channels[1]
