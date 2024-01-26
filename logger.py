@@ -10,7 +10,7 @@ parser.add_argument('-ss', '--serialsize', default=10, type=int)
 args = parser.parse_args()
 
 SYNC_BYTE = 0xC8
-FRAME_SIZE = 26
+FRAME_SIZE = 30
 
 iteration = 0
 last_pos = 0
