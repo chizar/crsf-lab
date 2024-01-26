@@ -19,7 +19,7 @@ valuesRest = b""
 
 with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
     inputByteArray = bytearray()
-    count = 0
+    total = 0
     while True:
         iteration += 1
         values = valuesRest + ser.read(args.serialsize)
@@ -36,7 +36,7 @@ with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
 
                 frame_size = len(frame)
                 last_pos = pos
-                count += 1
-                print(f'iteration {iteration:05d}; sync {count} found on {pos}, frame size {frame_size}, total size {size}')
+                total += 1
+                print(f'iteration {iteration:05d}; sync {total} found on {pos}, frame size {frame_size}, total size {size}')
                 print(frame)
             pos += 1

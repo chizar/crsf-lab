@@ -1,10 +1,13 @@
 
-BYTES1 = b"\xC8\xC8"
-BYTES2 = b"\xCC\xCC"
+print(0x18)
+print(0x16)
 
-BYTES = BYTES1 + BYTES2
-
-print(BYTES)
+# BYTES1 = b"\xC8\xC8"
+# BYTES2 = b"\xCC\xCC"
+#
+# BYTES = BYTES1 + BYTES2
+#
+# print(BYTES)
 
 # import argparse
 #

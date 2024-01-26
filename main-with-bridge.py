@@ -82,14 +82,13 @@ def print_frame(frame: Container, status: PacketValidationStatus) -> None:
 crsf_parser = CRSFParser(print_frame)
 
 with Serial("/dev/ttyS0", args.baud) as ser:
-    buffer = bytearray()
     while True:
         values = ser.read(args.serialsize)
 
         if args.bridgeenabled:
             ser.write(values)
 
-        buffer.extend(values)
+        buffer = bytearray(values)
 
         if args.dump:
             print(values)
