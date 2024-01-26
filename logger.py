@@ -16,7 +16,7 @@ iteration = 0
 with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
     inputByteArray = bytearray()
     count = 0
-    iteration += 0
+    iteration += 1
     while True:
         values = ser.read(args.serialsize)
         size = len(values)
