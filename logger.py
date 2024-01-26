@@ -1,4 +1,3 @@
-import sys
 import argparse
 
 from serial import Serial
@@ -13,6 +12,8 @@ args = parser.parse_args()
 SYNC_BYTE = 0xC8
 
 iteration = 0
+last_pos = 0
+
 with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
     inputByteArray = bytearray()
     count = 0
@@ -24,5 +25,7 @@ with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
         for byte in values:
             pos += 1
             if byte == SYNC_BYTE:
+                frame_size = pos - last_pos
+                last_pos = pos
                 count += 1
-                print(f'iteration {iteration:05d}; sync {count} found on {pos}. total size {size}')
+                print(f'iteration {iteration:05d}; sync {count} found on {pos}, frame size {frame_size}, total size {size}')
