@@ -34,7 +34,7 @@ with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
                     valuesRest = frame
                     continue
 
-                frame_size = pos - last_pos
+                frame_size = len(frame)
                 last_pos = pos
                 count += 1
                 print(f'iteration {iteration:05d}; sync {count} found on {pos}, frame size {frame_size}, total size {size}')
