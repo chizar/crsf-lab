@@ -15,17 +15,25 @@ FRAME_SIZE = 25  # frame = 26 - sync byte = 25
 iteration = 0
 last_pos = 0
 
+valuesRest = b""
+
 with Serial("/dev/ttyS0", args.baud, timeout=args.timeout) as ser:
     inputByteArray = bytearray()
     count = 0
     while True:
         iteration += 1
-        values = ser.read(args.serialsize)
+        values = valuesRest + ser.read(args.serialsize)
+
         size = len(values)
         pos = 0
         for byte in values:
             if byte == SYNC_BYTE:
+
                 frame = values[pos:pos + FRAME_SIZE]
+                if len(frame) < FRAME_SIZE:
+                    valuesRest = frame
+                    continue
+
                 frame_size = pos - last_pos
                 last_pos = pos
                 count += 1

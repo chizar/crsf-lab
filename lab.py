@@ -1,12 +1,10 @@
-SYNC_BYTE_BIN_STRING = b"\xc8"
-SYNC_BYTE = int.from_bytes(SYNC_BYTE_BIN_STRING, byteorder="little")
 
+BYTES1 = b"\xC8\xC8"
+BYTES2 = b"\xCC\xCC"
 
-print(bin(200))
-print(bin(int.from_bytes(b"\xC8\xCC", byteorder="big", signed=False)))
-print(bin(int.from_bytes(b"\xC8\xCC", byteorder="little", signed=False)))
+BYTES = BYTES1 + BYTES2
 
-
+print(BYTES)
 
 # import argparse
 #
