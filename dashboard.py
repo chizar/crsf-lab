@@ -17,7 +17,6 @@ parser.add_argument('-b', '--baud', default=425000, type=int)
 parser.add_argument('-ss', '--serialsize', default=100, type=int)
 parser.add_argument('-be', '--bridgeenabled', default=False, type=bool)
 parser.add_argument('-v', '--verbose', default=False, type=bool)
-parser.add_argument('-ls', '--logsensitivity', default=50, type=int)
 parser.add_argument('-p', '--port', default="/dev/ttyS0", type=str)
 parser.add_argument('-ll', '--loglevel', default=20, type=int, help="default INFO = 20, ERROR = 40, WARN = 30, DEBUG = 10")
 parser.add_argument('-lf', '--logfile', default="dashboard.log", type=str)
@@ -28,9 +27,10 @@ logging.basicConfig(level=args.loglevel, filename=args.logfile, format='%(asctim
 channels_state = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 running = True
 
-
 def dashboard(screen):
+    refresh_count = 0
     while True:
+        refresh_count += 1
         screen.print_at(f'CH01:{channels_state[0]:05d} '
                         f'CH02:{channels_state[1]:05d} '
                         f'CH03:{channels_state[2]:05d} '
@@ -46,7 +46,9 @@ def dashboard(screen):
                         f'CH13:{channels_state[12]:05d} '
                         f'CH14:{channels_state[13]:05d} '
                         f'CH15:{channels_state[14]:05d} '
-                        f'CH16:{channels_state[15]:05d}', 0, 0)
+                        f'CH16:{channels_state[15]:05d} '
+                        f'r:{refresh_count:5d} '
+                        , 0, 0)
 
         global running
 
