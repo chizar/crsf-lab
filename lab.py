@@ -30,6 +30,8 @@ print(parsed_channels.channels)
 # print(parsed_channels.channels[0])
 # print(parsed_channels.channels[15])
 
+
+
 def unpack(data, bitlen):
     mask = (1 << bitlen) - 1
     for chunk in zip(*[iter(data)] * bitlen):
@@ -40,12 +42,17 @@ def unpack(data, bitlen):
             n >>= bitlen
         yield from reversed(a)
 
+
+def parse_channels(data):
+    swapped = data[::-1]
+    return unpack(swapped, 11)
+
+
 # print(f'frame length {length}, actual length {actual_length}')
 
 start = time.time()
 for i in range(0, 10000):
-    swapped_channels = channels[::-1]
-    unpacked = unpack(swapped_channels, 11)
+    unpacked = parse_channels(channels)
 end = time.time()
 print(f'took {end-start}')
 
