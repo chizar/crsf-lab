@@ -79,7 +79,8 @@ class CRSFParser:
                         # print(input)
                         packet_crc = content.CRC
                         crc = crsf_frame_crc(data)
-                        if crc != packet_crc:
+                        # if crc != packet_crc:
+                        if False:
                             status = PacketValidationStatus.CRC
                             self._stats.crc_errors += 1
                             logging.error(f"invalid CRC, expected{crc}, actual {packet_crc}")
