@@ -80,6 +80,7 @@ def monitor_serial():
         crsf_parser = CRSFParser(update_state)
         with Serial(args.port, args.baud) as ser:
             logging.info(f'Opened serial {args.port} at baud {args.baud}')
+            buffer = bytearray()
             while True:
 
                 global running
@@ -91,7 +92,7 @@ def monitor_serial():
                 if args.bridgeenabled:
                     ser.write(values)
 
-                buffer = bytearray(values)
+                buffer.extend(values)
 
                 logging.debug('buffer {}', buffer)
 
