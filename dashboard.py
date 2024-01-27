@@ -30,10 +30,11 @@ channels_state = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 running = True
 refresh_count = 0
 serial_count = 0
+buffer = bytearray()
 
 
 def dashboard(screen):
-    global refresh_count, serial_count, running
+    global refresh_count, serial_count, running, buffer
 
     while True:
         refresh_count += 1
@@ -85,14 +86,13 @@ def update_state(frame: Container, status: PacketValidationStatus) -> None:
 
 
 def monitor_serial():
-    global running
+    global running, buffer
 
     try:
         logging.info("Start serial thread")
         crsf_parser = CRSFParser(update_state)
         with Serial(args.port, args.baud) as ser:
             logging.info(f'Opened serial {args.port} at baud {args.baud}')
-            buffer = bytearray()
             while True:
 
                 if not running:
@@ -105,14 +105,11 @@ def monitor_serial():
 
                 buffer.extend(values)
 
-                logging.debug('buffer {}', buffer)
-
                 crsf_parser.parse_stream(buffer)
 
                 # if args.verbose:
                 #     stats = crsf_parser.get_stats()
                 #     logging.info("stats: ", stats)
-
 
     except Exception:
         running = False
