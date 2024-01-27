@@ -1,4 +1,5 @@
 __version__ = "0.0.0"
+import logging
 
 from dataclasses import dataclass
 from typing import Any, Callable, Container
@@ -81,7 +82,7 @@ class CRSFParser:
                         if crc != packet_crc:
                             status = PacketValidationStatus.CRC
                             self._stats.crc_errors += 1
-                            print(f"invalid CRC, expected{crc}, actual {packet_crc}")
+                            logging.error(f"invalid CRC, expected{crc}, actual {packet_crc}")
                         else:
                             self._stats.valid_frames += 1
                         if self._consumer:
