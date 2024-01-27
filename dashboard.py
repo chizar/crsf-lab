@@ -51,12 +51,14 @@ def dashboard(screen):
                         f'CH13:{channels_state[12]:05d} '
                         f'CH14:{channels_state[13]:05d} '
                         f'CH15:{channels_state[14]:05d} '
-                        f'CH16:{channels_state[15]:05d} '
+                        f'CH16:{channels_state[15]:05d}'
                         , 0, 0)
 
-        screen.print_at(f'r:{refresh_count:5d} '
-                        f's:{serial_count:5d} '
+        screen.print_at(f'refresh count: {refresh_count}'
                         , 0, 1)
+
+        screen.print_at(f'serial read iterations: {serial_count}'
+                        , 0, 2)
 
         global running
 
