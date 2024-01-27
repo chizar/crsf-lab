@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 
-from random import randint
-from threading import Thread
-import sys
 import argparse
+import logging
+from threading import Thread
 from typing import Container
 
+from asciimatics.screen import Screen
 from serial import Serial
 
 from crsf_parser import CRSFParser, PacketValidationStatus
 from crsf_parser.payloads import PacketsTypes
-from asciimatics.screen import Screen
-from threading import Thread
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--baud', default=425000, type=int)
@@ -21,7 +19,11 @@ parser.add_argument('-v', '--verbose', default=False, type=bool)
 parser.add_argument('-d', '--dump', default=False, type=bool)
 parser.add_argument('-ls', '--logsensitivity', default=50, type=int)
 parser.add_argument('-p', '--port', default="/dev/ttyS0", type=str)
+parser.add_argument('-ll', '--loglevel', default=20, type=int, help="default INFO = 20, ERROR = 40, WARN = 30, DEBUG = 10")
+parser.add_argument('-lf', '--logfile', default="dashboard.log", type=str)
 args = parser.parse_args()
+
+logging.basicConfig(level=args.loglevel, filename=args.logfile, format='%(asctime)s [%(levelname)s] %(name)s: %(message)s [%(threadName)s]')
 
 channels_state = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 running = True
@@ -29,7 +31,6 @@ running = True
 
 def dashboard(screen):
     while True:
-
         screen.print_at(f'CH01:{channels_state[0]:05d} '
                         f'CH02:{channels_state[1]:05d} '
                         f'CH03:{channels_state[2]:05d} '
@@ -47,17 +48,17 @@ def dashboard(screen):
                         f'CH15:{channels_state[14]:05d} '
                         f'CH16:{channels_state[15]:05d}', 0, 0)
 
+        global running
+
         ev = screen.get_key()
         if ev in (ord('Q'), ord('q')):
-            global running
             running = False
             return
 
+        if not running:
+            return
+
         screen.refresh()
-
-
-def start_dashboard():
-    Screen.wrapper(dashboard)
 
 
 def update_state(frame: Container, status: PacketValidationStatus) -> None:
@@ -71,35 +72,44 @@ def update_state(frame: Container, status: PacketValidationStatus) -> None:
 
 
 def monitor_serial():
-    crsf_parser = CRSFParser(update_state)
+    try:
+        crsf_parser = CRSFParser(update_state)
+        with Serial(args.port, args.baud) as ser:
+            while True:
 
-    with Serial(args.port, args.baud) as ser:
-        while True:
+                global running
+                if not running:
+                    return
 
-            global running
-            if not running:
-                return
+                values = ser.read(args.serialsize)
 
-            values = ser.read(args.serialsize)
+                if args.bridgeenabled:
+                    ser.write(values)
 
-            if args.bridgeenabled:
-                ser.write(values)
+                buffer = bytearray(values)
 
-            buffer = bytearray(values)
+                if args.dump:
+                    logging.info(values)
+                    logging.info(buffer)
 
-            if args.dump:
-                print(values)
-                print(buffer)
+                crsf_parser.parse_stream(buffer)
 
-            crsf_parser.parse_stream(buffer)
+                if args.verbose:
+                    stats = crsf_parser.get_stats()
+                    logging.info("stats: ", stats)
+    except Exception:
+        running = False
+        logging.exception("error in monitor serial thread")
 
-            if args.verbose:
-                stats = crsf_parser.get_stats()
-                print("stats: ", stats)
 
 
-dashboard_thread = Thread(target=start_dashboard, name="dashboard")
-dashboard_thread.run()
-
+logging.info("Starting...")
+logging.info("Start serial thread")
 serial_thread = Thread(target=monitor_serial, name="serial")
-serial_thread.run()
+serial_thread.start()
+
+Screen.wrapper(dashboard)
+
+logging.info("bye bye")
+serial_thread.join(10)
+exit(0)

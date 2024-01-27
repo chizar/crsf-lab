@@ -1,6 +1,39 @@
+import logging
+import time
+from threading import Thread
 
-print(0x18)
-print(abs(1000-5000))
+
+def thread1_main():
+    while True:
+        print("thread 1")
+        time.sleep(1)
+
+
+def thread2_main():
+    while True:
+        print("thread 2")
+        time.sleep(1)
+
+
+thread1 = Thread(target=thread1_main, name="thread1_main")
+thread1.start()
+
+thread2 = Thread(target=thread2_main, name="thread2_main")
+thread2.start()
+
+time.sleep(100)
+
+# logging.basicConfig(level=logging.INFO, filename="dashboard.log")
+#
+# logging.debug('This is a debug message')
+# logging.info('This is an info message')
+# logging.warning('This is a warning message')
+# logging.error('This is an error message')
+# logging.critical('This is a critical message')
+#
+#
+# logging.info(0x18)
+# logging.info(abs(1000-5000))
 
 # BYTES1 = b"\xC8\xC8"
 # BYTES2 = b"\xCC\xCC"
