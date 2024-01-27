@@ -1,27 +1,82 @@
 import logging
 import time
 from threading import Thread
+from construct import (
+    Array,
+    BitStruct,
+    BitsInteger,
+    ByteSwapped
+)
+
+payload_rc_channels_packed = ByteSwapped(
+    BitStruct("channels" / Array(16, BitsInteger(11)))
+)
+
+buffer = bytearray(b"\xc8\x18\x16\xe0\x03\x9f+\xc0\xf7\x8b_\xfc\xe2\x17\xbf\xf8E\xf9\xca\x07\x00\x00\x0c|\xe2'")
+sync_byte = buffer[0]
+length = buffer[1]
+frame_type = buffer[2]  # 0x16 = channels
+# channels = buffer[3:19]
+
+channels = buffer[3:25]
+start = time.time()
+for i in range(0, 10000):
+    parsed_channels = payload_rc_channels_packed.parse(channels)
+end = time.time()
+print(f'struct took {end-start}')
+
+#
+print(parsed_channels.channels)
+# print(parsed_channels.channels[0])
+# print(parsed_channels.channels[15])
+
+def unpack(data, bitlen):
+    mask = (1 << bitlen) - 1
+    for chunk in zip(*[iter(data)] * bitlen):
+        n = int.from_bytes(chunk, 'big')
+        a = []
+        for i in range(8):
+            a.append(n & mask)
+            n >>= bitlen
+        yield from reversed(a)
+
+# print(f'frame length {length}, actual length {actual_length}')
+
+start = time.time()
+for i in range(0, 10000):
+    swapped_channels = channels[::-1]
+    unpacked = unpack(swapped_channels, 11)
+end = time.time()
+print(f'took {end-start}')
 
 
-def thread1_main():
-    while True:
-        print("thread 1")
-        time.sleep(1)
+
+print(list(unpacked))
+#
+# for i in range(0, 16):
+#
+#     print(f'CH[{i}]{swapped_channels[i]}')
 
 
-def thread2_main():
-    while True:
-        print("thread 2")
-        time.sleep(1)
-
-
-thread1 = Thread(target=thread1_main, name="thread1_main")
-thread1.start()
-
-thread2 = Thread(target=thread2_main, name="thread2_main")
-thread2.start()
-
-time.sleep(100)
+# def thread1_main():
+#     while True:
+#         print("thread 1")
+#         time.sleep(1)
+#
+#
+# def thread2_main():
+#     while True:
+#         print("thread 2")
+#         time.sleep(1)
+#
+#
+# thread1 = Thread(target=thread1_main, name="thread1_main")
+# thread1.start()
+#
+# thread2 = Thread(target=thread2_main, name="thread2_main")
+# thread2.start()
+#
+# time.sleep(100)
 
 # logging.basicConfig(level=logging.INFO, filename="dashboard.log")
 #
