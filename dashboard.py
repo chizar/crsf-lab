@@ -33,8 +33,9 @@ serial_count = 0
 
 
 def dashboard(screen):
+    global refresh_count, serial_count, running
+
     while True:
-        global refresh_count, serial_count
         refresh_count += 1
         screen.print_at(f'CH01:{channels_state[0]:05d} '
                         f'CH02:{channels_state[1]:05d} '
@@ -60,8 +61,6 @@ def dashboard(screen):
         screen.print_at(f'serial read iterations: {serial_count}'
                         , 0, 2)
 
-        global running
-
         ev = screen.get_key()
         if ev in (ord('Q'), ord('q')):
             running = False
@@ -86,6 +85,8 @@ def update_state(frame: Container, status: PacketValidationStatus) -> None:
 
 
 def monitor_serial():
+    global running
+
     try:
         logging.info("Start serial thread")
         crsf_parser = CRSFParser(update_state)
@@ -94,7 +95,6 @@ def monitor_serial():
             buffer = bytearray()
             while True:
 
-                global running
                 if not running:
                     return
 
