@@ -70,10 +70,9 @@ def update_state(frame: Container, status: PacketValidationStatus) -> None:
     channels_state = frame.payload.channels
 
 
-crsf_parser = CRSFParser(update_state)
-
-
 def monitor_serial():
+    crsf_parser = CRSFParser(update_state)
+
     with Serial(args.port, args.baud) as ser:
         while True:
 
