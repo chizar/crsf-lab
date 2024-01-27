@@ -26,10 +26,12 @@ logging.basicConfig(level=args.loglevel, filename=args.logfile, format='%(asctim
 
 channels_state = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 running = True
+refresh_count = 0
+serial_count = 0
 
 def dashboard(screen):
-    refresh_count = 0
     while True:
+        global refresh_count, serial_count
         refresh_count += 1
         screen.print_at(f'CH01:{channels_state[0]:05d} '
                         f'CH02:{channels_state[1]:05d} '
@@ -48,6 +50,7 @@ def dashboard(screen):
                         f'CH15:{channels_state[14]:05d} '
                         f'CH16:{channels_state[15]:05d} '
                         f'r:{refresh_count:5d} '
+                        f's:{serial_count:5d} '
                         , 0, 0)
 
         global running
@@ -70,8 +73,9 @@ def update_state(frame: Container, status: PacketValidationStatus) -> None:
     if frame.header.type != PacketsTypes.RC_CHANNELS_PACKED:  # TODO update types counters
         return
 
-    global channels_state
+    global channels_state, serial_count
     channels_state = frame.payload.channels
+    serial_count += 1
 
 
 def monitor_serial():
@@ -103,7 +107,6 @@ def monitor_serial():
                 #     stats = crsf_parser.get_stats()
                 #     logging.info("stats: ", stats)
 
-                time.sleep(0.100)
 
     except Exception:
         running = False
