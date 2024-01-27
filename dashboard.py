@@ -85,7 +85,7 @@ def dashboard(screen):
             return
 
         screen.refresh()
-        time.sleep(0.100)
+        time.sleep(1)
 
 
 
