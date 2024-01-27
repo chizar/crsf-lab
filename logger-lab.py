@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
-from threading import Thread
 import time
+from threading import Thread
 
+from asciimatics.screen import Screen
 from serial import Serial
 
 parser = argparse.ArgumentParser()
@@ -55,7 +56,17 @@ def monitor_serial():
                 pos += 1
 
 
+def dashboard(screen):
+    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_frame
+    while True:
+        screen.print_at(last_frame, 0, 0)
+        screen.refresh()
+        time.sleep(0.100)
+
+
 serial_thread = Thread(target=monitor_serial, name="serial")
 serial_thread.start()
 
-time.sleep(10_000)
+Screen.wrapper(dashboard)
+
+
