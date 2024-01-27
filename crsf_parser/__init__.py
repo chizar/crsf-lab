@@ -44,7 +44,6 @@ class CRSFParser:
         self._input = bytearray()
         self._consumer = consumer
         self._stats = ProtocolStats()
-        self.content = None
         pass
 
     def get_stats(self) -> ProtocolStats:
@@ -75,11 +74,10 @@ class CRSFParser:
                         # print(input)
                         data = input[: size + extra_data]
                         # print(data, len(data))
-                        if self.content == None:
-                            self.content = crsf_frame.parse(data)
+                        content = crsf_frame.parse(data)
                         del input[: size + extra_data]
                         # print(input)
-                        packet_crc = self.content.CRC
+                        packet_crc = content.CRC
                         crc = crsf_frame_crc(data)
                         if crc != packet_crc:
                             status = PacketValidationStatus.CRC
@@ -88,7 +86,7 @@ class CRSFParser:
                         else:
                             self._stats.valid_frames += 1
                         if self._consumer:
-                            self._consumer(self.content, status)
+                            self._consumer(content, status)
                         continue
                     else:
                         self._stats.invalid_frames += 1
