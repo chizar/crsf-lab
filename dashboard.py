@@ -61,7 +61,7 @@ def dashboard(screen):
             return
 
         screen.refresh()
-        # time.sleep(0.100)
+        time.sleep(0.100)
 
 
 def update_state(frame: Container, status: PacketValidationStatus) -> None:
@@ -97,9 +97,12 @@ def monitor_serial():
 
                 crsf_parser.parse_stream(buffer)
 
+
                 # if args.verbose:
                 #     stats = crsf_parser.get_stats()
                 #     logging.info("stats: ", stats)
+
+                time.sleep(0.100)
 
     except Exception:
         running = False
