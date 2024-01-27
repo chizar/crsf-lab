@@ -32,11 +32,25 @@ refresh_count = 0
 serial_count = 0
 buffer = bytearray()
 
+def update_state(frame: Container, status: PacketValidationStatus) -> None:
+    if status != PacketValidationStatus.VALID:  # TODO update valid/invalid counters
+        return
+    if frame.header.type != PacketsTypes.RC_CHANNELS_PACKED:  # TODO update types counters
+        return
+
+    global channels_state, serial_count
+    channels_state = frame.payload.channels
+    serial_count += 1
+
+crsf_parser = CRSFParser(update_state)
+
 
 def dashboard(screen):
-    global refresh_count, serial_count, running, buffer
+    global refresh_count, serial_count, running, buffer, crsf_parser
 
     while True:
+        crsf_parser.parse_stream(buffer)
+
         refresh_count += 1
         screen.print_at(f'CH01:{channels_state[0]:05d} '
                         f'CH02:{channels_state[1]:05d} '
@@ -74,15 +88,7 @@ def dashboard(screen):
         time.sleep(0.100)
 
 
-def update_state(frame: Container, status: PacketValidationStatus) -> None:
-    if status != PacketValidationStatus.VALID:  # TODO update valid/invalid counters
-        return
-    if frame.header.type != PacketsTypes.RC_CHANNELS_PACKED:  # TODO update types counters
-        return
 
-    global channels_state, serial_count
-    channels_state = frame.payload.channels
-    serial_count += 1
 
 
 def monitor_serial():
@@ -90,7 +96,6 @@ def monitor_serial():
 
     try:
         logging.info("Start serial thread")
-        crsf_parser = CRSFParser(update_state)
         with Serial(args.port, args.baud) as ser:
             logging.info(f'Opened serial {args.port} at baud {args.baud}')
             while True:
@@ -104,8 +109,6 @@ def monitor_serial():
                     ser.write(values)
 
                 buffer.extend(values)
-
-                crsf_parser.parse_stream(buffer)
 
                 # if args.verbose:
                 #     stats = crsf_parser.get_stats()
