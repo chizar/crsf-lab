@@ -51,7 +51,7 @@ def monitor_serial():
                     total_frames += 1
                     # print(f'iteration {iteration:05d}; sync {total_frames} found on {pos}, '
                     #       f'frame size {last_actual_frame_size}, total size {last_read_size}')
-                    print(frame)
+                    # print(frame)
                     last_frame = frame
                 pos += 1
 
