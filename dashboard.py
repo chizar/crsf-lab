@@ -61,7 +61,8 @@ def dashboard(screen):
             return
 
         screen.refresh()
-        time.sleep(0.100)
+        # time.sleep(0.100)
+
 
 def update_state(frame: Container, status: PacketValidationStatus) -> None:
     if status != PacketValidationStatus.VALID:  # TODO update valid/invalid counters
