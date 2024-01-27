@@ -19,7 +19,6 @@ FRAME_SIZE = 26
 
 iteration = 0
 
-valuesRest = b""
 
 last_frame = bytearray()
 total_frames = 0
@@ -29,12 +28,13 @@ last_actual_frame_size = 0
 
 def monitor_serial():
     global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_frame
+    values_rest = b""
 
     with Serial(args.port, args.baud, timeout=args.timeout) as ser:
 
         while True:
             iteration += 1
-            values = valuesRest + ser.read(args.serialsize)
+            values = values_rest + ser.read(args.serialsize)
 
             last_read_size = len(values)
             pos = 0
@@ -43,7 +43,7 @@ def monitor_serial():
 
                     frame = values[pos:pos + FRAME_SIZE]
                     if len(frame) < FRAME_SIZE:
-                        valuesRest = frame
+                        values_rest = frame
                         continue
 
                     last_actual_frame_size = len(frame)
