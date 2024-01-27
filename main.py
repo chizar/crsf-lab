@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from typing import Container
 from crsf_parser import CRSFParser, PacketValidationStatus
 from serial import Serial
