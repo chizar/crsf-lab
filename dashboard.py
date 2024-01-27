@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import time
 from threading import Thread
 from typing import Container
 
@@ -13,10 +14,9 @@ from crsf_parser.payloads import PacketsTypes
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--baud', default=425000, type=int)
-parser.add_argument('-ss', '--serialsize', default=200, type=int)
+parser.add_argument('-ss', '--serialsize', default=100, type=int)
 parser.add_argument('-be', '--bridgeenabled', default=False, type=bool)
 parser.add_argument('-v', '--verbose', default=False, type=bool)
-parser.add_argument('-d', '--dump', default=False, type=bool)
 parser.add_argument('-ls', '--logsensitivity', default=50, type=int)
 parser.add_argument('-p', '--port', default="/dev/ttyS0", type=str)
 parser.add_argument('-ll', '--loglevel', default=20, type=int, help="default INFO = 20, ERROR = 40, WARN = 30, DEBUG = 10")
@@ -59,7 +59,7 @@ def dashboard(screen):
             return
 
         screen.refresh()
-
+        time.sleep(0.100)
 
 def update_state(frame: Container, status: PacketValidationStatus) -> None:
     if status != PacketValidationStatus.VALID:  # TODO update valid/invalid counters
@@ -73,8 +73,10 @@ def update_state(frame: Container, status: PacketValidationStatus) -> None:
 
 def monitor_serial():
     try:
+        logging.info("Start serial thread")
         crsf_parser = CRSFParser(update_state)
         with Serial(args.port, args.baud) as ser:
+            logging.info(f'Opened serial {args.port} at baud {args.baud}')
             while True:
 
                 global running
@@ -88,28 +90,26 @@ def monitor_serial():
 
                 buffer = bytearray(values)
 
-                if args.dump:
-                    logging.info(values)
-                    logging.info(buffer)
+                logging.debug('buffer {}', buffer)
 
                 crsf_parser.parse_stream(buffer)
 
-                if args.verbose:
-                    stats = crsf_parser.get_stats()
-                    logging.info("stats: ", stats)
+                # if args.verbose:
+                #     stats = crsf_parser.get_stats()
+                #     logging.info("stats: ", stats)
+
     except Exception:
         running = False
         logging.exception("error in monitor serial thread")
 
 
-
 logging.info("Starting...")
-logging.info("Start serial thread")
 serial_thread = Thread(target=monitor_serial, name="serial")
 serial_thread.start()
 
 Screen.wrapper(dashboard)
 
-logging.info("bye bye")
+logging.info("Shutdown...")
 serial_thread.join(10)
+logging.info("Bye-bye")
 exit(0)
