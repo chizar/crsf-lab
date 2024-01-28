@@ -9,6 +9,7 @@ from serial import Serial
 
 import dashboard_lines
 from parse_frame import extract_frame, parse_channels_frame
+from crc import frame_crc
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--baud', default=425000, type=int)
@@ -61,6 +62,7 @@ def monitor_serial():
 def dashboard(screen):
     global args, serial_iterations, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
     dashboard_iterations = 0
+    crc_errors = 0
     while True:
         dashboard_iterations += 1
         local_last_channels_frame = last_channels_frame
@@ -68,6 +70,9 @@ def dashboard(screen):
 
         if len_local_last_channels_frame > 0:
             sync_byte, length, crc, channels = parse_channels_frame(local_last_channels_frame)
+            actual_crc = frame_crc(local_last_channels_frame)
+            if actual_crc != crc:
+                crc_errors += 1
 
             if len(channels) == 16:
                 screen.print_at(f'CH01:{channels[0]:05d} '
@@ -100,6 +105,7 @@ def dashboard(screen):
                         0, dashboard_lines.DASHBOARD_LAST_CHANNELS_FRAME_LEN)
         screen.print_at(f'last read size: {last_read_size}', 0, dashboard_lines.DASHBOARD_LAST_READ_SIZE)
         screen.print_at(f'last rest size: {last_rest_size}', 0, dashboard_lines.DASHBOARD_LAST_REST_SIZE)
+        screen.print_at(f'crc errors: {crc_errors}', 0, dashboard_lines.DASHBOARD_CRC_ERRORS)
         screen.refresh()
         time.sleep(0.100)
 
