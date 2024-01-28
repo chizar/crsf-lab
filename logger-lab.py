@@ -17,6 +17,7 @@ args = parser.parse_args()
 
 SYNC_BYTE = 0xC8
 FRAME_SIZE = 26
+FRAME_TYPE_RC_CHANNELS_PACKED = 0x16
 
 iteration = 0
 
@@ -36,11 +37,24 @@ def monitor_serial():
         while True:
             iteration += 1
             values = values_rest + ser.read(args.serialsize)
+            values_rest = b""
 
             last_read_size = len(values)
             pos = 0
             for byte in values:
                 if byte == SYNC_BYTE:
+                    if len(frame) < pos+1 + 1:
+                        values_rest = frame[pos:len(frame)]
+                        continue  # no length byte
+                    length = frame[pos + 1]
+
+                    if len(frame) < pos + length:
+                        values_rest = frame[pos:len(frame)]
+                        continue  # not a full frame length
+
+                    frame_type = frame[pos + 2]  # 0x16 = channels
+                    if frame_type != FRAME_TYPE_RC_CHANNELS_PACKED:
+                        continue
 
                     frame = values[pos:pos + FRAME_SIZE]
                     if len(frame) < FRAME_SIZE:
