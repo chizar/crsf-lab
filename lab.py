@@ -34,7 +34,11 @@ buffer = bytearray(b"\xc8\x18\x16\xe0\x03\x9f+\xc0\xf7\x8b_\xfc\xe2\x17\xbf\xf8E
 # frame_type = buffer[2]  # 0x16 = channels
 # # channels = buffer[3:19]
 #
+print(f'length: {buffer[0]}')
+print(f'type: {buffer[1]}')
+print(f'crc: {buffer[-1]}')
 channels = buffer[3:25]
+# crc = buffer[-1]
 # start = time.time()
 # for i in range(0, 10000):
 #     parsed_channels = payload_rc_channels_packed.parse(channels)
