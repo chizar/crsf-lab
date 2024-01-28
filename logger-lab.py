@@ -90,7 +90,7 @@ def dashboard(screen):
 
             screen.print_at(f'last sync byte: {sync_byte}', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
             screen.print_at(f'last payload length: {length}', 0, dashboard_lines.DASHBOARD_LAST_PAYLOAD_LENGTH)
-            screen.print_at(f'last crc: {crc}', 0, dashboard_lines.DASHBOARD_LAST_REST_SIZE)
+            screen.print_at(f'last crc: {crc}', 0, dashboard_lines.DASHBOARD_LAST_CRC)
 
         screen.print_at(f'serial iterations: {serial_iterations}', 0, dashboard_lines.DASHBOARD_SERIAL_ITERATIONS)
         screen.print_at(f'total frames: {total_frames}', 0, dashboard_lines.DASHBOARD_TOTAL_FRAMES)
