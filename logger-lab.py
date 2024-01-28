@@ -58,7 +58,7 @@ def monitor_serial():
 
                             if frame_types[0] != last_frame_type:
                                 frame_types.insert(0, last_frame_type)
-                                frame_types = frame_types[0, 5]
+                                del frame_types[-1]
 
                             if last_frame_type == FRAME_TYPE_RC_CHANNELS_PACKED:
                                 last_channels_frame = frame
