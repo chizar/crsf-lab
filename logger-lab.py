@@ -110,7 +110,7 @@ def dashboard(screen):
             screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
             screen.print_at(f'last payload length: {length:05d} ', 0, dashboard_lines.DASHBOARD_LAST_PAYLOAD_LENGTH)
 
-        screen.print_at(f'last frame type: {last_frame_type:05d} ', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
+        screen.print_at(f'last frame type: {last_frame_type} ', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
 
         screen.refresh()
         time.sleep(0.100)
