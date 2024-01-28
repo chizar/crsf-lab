@@ -7,6 +7,7 @@ from threading import Thread
 from asciimatics.screen import Screen
 from serial import Serial
 from parse_frame import extract_frame
+import dashboard_lines
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--baud', default=425000, type=int)
@@ -22,8 +23,8 @@ FRAME_TYPE_RC_CHANNELS_PACKED = 0x16
 
 iteration = 0
 
-
 last_channels_frame = bytearray()
+last_frame_type = None
 total_frames = 0
 last_read_size = 0
 last_actual_frame_size = 0
@@ -47,7 +48,8 @@ def monitor_serial():
                     frame, values_rest = extract_frame(values, pos)
                     if frame is not None:
                         total_frames += 1
-                        if frame[2] == FRAME_TYPE_RC_CHANNELS_PACKED:
+                        last_frame_type = frame[2]
+                        if last_frame_type == FRAME_TYPE_RC_CHANNELS_PACKED:
                             last_channels_frame = frame
                 pos += 1
 
@@ -66,22 +68,23 @@ def unpack(data, bitlen):
 def parse_channels(frame):
     sync_byte = frame[0]
     length = frame[1]
-    frame_type = frame[2]  # 0x16 = channels
 
     payload = frame[3:25]
     swapped = payload[::-1]
     channels = unpack(swapped, 11)
-    return [sync_byte, length, frame_type, list(channels)]
+    return [sync_byte, length, list(channels)]
 
 
 def dashboard(screen):
-    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame
+    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
     while True:
         len_last_channels_frame = len(last_channels_frame)
         if len_last_channels_frame < 10:
-            screen.print_at(f'len(last_channels_frame) is low: {len_last_channels_frame}', 0, 10)
-        else:
-            sync_byte, length, frame_type, channels = parse_channels(last_channels_frame)
+            screen.print_at(f'len(last_channels_frame) is low: {len_last_channels_frame}',
+                            0, dashboard_lines.DASHBOARD_WARNING)
+
+        if len_last_channels_frame > 10:
+            sync_byte, length, channels = parse_channels(last_channels_frame)
 
             if len(channels) < 16:
                 continue
@@ -102,11 +105,12 @@ def dashboard(screen):
                             f'CH14:{channels[13]:05d} '
                             f'CH15:{channels[14]:05d} '
                             f'CH16:{channels[15]:05d}'
-                            , 0, 0)
+                            , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
 
-            screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, 1)
-            screen.print_at(f'last payload length: {length:05d} ', 0, 2)
-            screen.print_at(f'last frame type: {frame_type:05d} ', 0, 3)
+            screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
+            screen.print_at(f'last payload length: {length:05d} ', 0, dashboard_lines.DASHBOARD_LAST_PAYLOAD_LENGTH)
+
+        screen.print_at(f'last frame type: {last_frame_type:05d} ', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
 
         screen.refresh()
         time.sleep(0.100)
