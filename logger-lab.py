@@ -68,22 +68,25 @@ def unpack(data, bitlen):
 
 
 def parse_channels(frame):
-    # sync_byte = frame[0]
-    # length = frame[1]
-    # frame_type = frame[2]  # 0x16 = channels
+    sync_byte = frame[0]
+    length = frame[1]
+    frame_type = frame[2]  # 0x16 = channels
 
-    channels = frame[3:25]
-    swapped = channels[::-1]
-    return unpack(swapped, 11)
+    payload = frame[3:25]
+    swapped = payload[::-1]
+    channels = unpack(swapped, 11)
+    return [sync_byte, length, frame_type, list(channels)]
 
 
 def dashboard(screen):
     global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_frame
     while True:
 
-        channels = list(parse_channels(last_frame))
+        sync_byte, length, frame_type, channels = parse_channels(last_frame)
+
         if len(channels) < 16:
             continue
+
         screen.print_at(f'CH01:{channels[0]:05d} '
                         f'CH02:{channels[1]:05d} '
                         f'CH03:{channels[2]:05d} '
@@ -101,6 +104,11 @@ def dashboard(screen):
                         f'CH15:{channels[14]:05d} '
                         f'CH16:{channels[15]:05d}'
                         , 0, 0)
+
+        screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, 1)
+        screen.print_at(f'last payload length: {length:05d} ', 0, 2)
+        screen.print_at(f'last frame type: {frame_type:05d} ', 0, 3)
+
         screen.refresh()
         time.sleep(0.100)
 
