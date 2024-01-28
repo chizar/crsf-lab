@@ -25,21 +25,26 @@ last_channels_frame = bytearray()
 last_frame_type = 0
 total_frames = 0
 last_read_size = 0
+last_rest_size = 0
 last_actual_frame_size = 0
 
 
 def monitor_serial():
-    global args, serial_iterations, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
+    global args, serial_iterations, total_frames, last_read_size, last_rest_size, last_actual_frame_size, last_channels_frame, last_frame_type
     values_rest = b""
 
     with Serial(args.port, args.baud, timeout=args.timeout) as ser:
 
         while True:
             serial_iterations += 1
-            values = values_rest + ser.read(args.serialsize)
+
+            read_values = ser.read(args.serialsize)
+            last_read_size = len(read_values)
+            last_rest_size = len(values_rest)
+
+            values = values_rest + read_values
             values_rest = b""
 
-            last_read_size = len(values)
             pos = 0
             for byte in values:
                 if byte == SYNC_BYTE:
@@ -93,6 +98,7 @@ def dashboard(screen):
         screen.print_at(f'len(last_channels_frame): {len_local_last_channels_frame}',
                         0, dashboard_lines.DASHBOARD_LAST_CHANNELS_FRAME_LEN)
         screen.print_at(f'last read size: {last_read_size}', 0, dashboard_lines.DASHBOARD_LAST_READ_SIZE)
+        screen.print_at(f'last rest size: {last_rest_size}', 0, dashboard_lines.DASHBOARD_LAST_REST_SIZE)
         screen.refresh()
         time.sleep(0.100)
 
