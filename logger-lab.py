@@ -24,7 +24,7 @@ FRAME_TYPE_RC_CHANNELS_PACKED = 0x16
 iteration = 0
 
 last_channels_frame = bytearray()
-last_frame_type = None
+last_frame_type = 0
 total_frames = 0
 last_read_size = 0
 last_actual_frame_size = 0
@@ -113,7 +113,7 @@ def dashboard(screen):
 
         screen.print_at(f'serial iterations: {iteration}', 0, dashboard_lines.DASHBOARD_SERIAL_ITERATIONS)
         screen.print_at(f'total frames: {total_frames}', 0, dashboard_lines.DASHBOARD_TOTAL_FRAMES)
-        # screen.print_at(f'last frame type: {last_frame_type}', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
+        screen.print_at(f'last frame type: {last_frame_type}', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
         screen.print_at(f'dashboard iterations: {dashboard_iterations}', 0, dashboard_lines.DASHBOARD_ITERATIONS)
         screen.print_at(f'len(last_channels_frame): {len_local_last_channels_frame}',
                         0, dashboard_lines.DASHBOARD_LAST_CHANNELS_FRAME_LEN)
