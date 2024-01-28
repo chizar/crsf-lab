@@ -90,9 +90,6 @@ def dashboard(screen):
         if len_local_last_channels_frame > 0:
             sync_byte, length, channels = parse_channels(local_last_channels_frame)
 
-            if len(channels) < 16:
-                continue
-
             screen.print_at(f'CH01:{channels[0]:05d} '
                             f'CH02:{channels[1]:05d} '
                             f'CH03:{channels[2]:05d} '
