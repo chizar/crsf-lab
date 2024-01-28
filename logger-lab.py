@@ -78,34 +78,34 @@ def dashboard(screen):
     global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame
     while True:
         if len(last_channels_frame) < 10:
-            continue
+            screen.print_at(f'len(last_channels_frame) is low', 0, 10)
+        else:
+            sync_byte, length, frame_type, channels = parse_channels(last_channels_frame)
 
-        sync_byte, length, frame_type, channels = parse_channels(last_channels_frame)
+            if len(channels) < 16:
+                continue
 
-        if len(channels) < 16:
-            continue
+            screen.print_at(f'CH01:{channels[0]:05d} '
+                            f'CH02:{channels[1]:05d} '
+                            f'CH03:{channels[2]:05d} '
+                            f'CH04:{channels[3]:05d} '
+                            f'CH05:{channels[4]:05d} '
+                            f'CH06:{channels[5]:05d} '
+                            f'CH07:{channels[6]:05d} '
+                            f'CH08:{channels[7]:05d} '
+                            f'CH09:{channels[8]:05d} '
+                            f'CH10:{channels[9]:05d} '
+                            f'CH11:{channels[10]:05d} '
+                            f'CH12:{channels[11]:05d} '
+                            f'CH13:{channels[12]:05d} '
+                            f'CH14:{channels[13]:05d} '
+                            f'CH15:{channels[14]:05d} '
+                            f'CH16:{channels[15]:05d}'
+                            , 0, 0)
 
-        screen.print_at(f'CH01:{channels[0]:05d} '
-                        f'CH02:{channels[1]:05d} '
-                        f'CH03:{channels[2]:05d} '
-                        f'CH04:{channels[3]:05d} '
-                        f'CH05:{channels[4]:05d} '
-                        f'CH06:{channels[5]:05d} '
-                        f'CH07:{channels[6]:05d} '
-                        f'CH08:{channels[7]:05d} '
-                        f'CH09:{channels[8]:05d} '
-                        f'CH10:{channels[9]:05d} '
-                        f'CH11:{channels[10]:05d} '
-                        f'CH12:{channels[11]:05d} '
-                        f'CH13:{channels[12]:05d} '
-                        f'CH14:{channels[13]:05d} '
-                        f'CH15:{channels[14]:05d} '
-                        f'CH16:{channels[15]:05d}'
-                        , 0, 0)
-
-        screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, 1)
-        screen.print_at(f'last payload length: {length:05d} ', 0, 2)
-        screen.print_at(f'last frame type: {frame_type:05d} ', 0, 3)
+            screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, 1)
+            screen.print_at(f'last payload length: {length:05d} ', 0, 2)
+            screen.print_at(f'last frame type: {frame_type:05d} ', 0, 3)
 
         screen.refresh()
         time.sleep(0.100)
