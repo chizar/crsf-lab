@@ -81,12 +81,11 @@ def dashboard(screen):
     while True:
         dashboard_iterations += 1
 
-        len_last_channels_frame = len(last_channels_frame)
-        if len_last_channels_frame < 10:
-            screen.print_at(f'len(last_channels_frame) is low: {len_last_channels_frame}',
+        if len(last_channels_frame) < 10:
+            screen.print_at(f'len(last_channels_frame) is low: {len(last_channels_frame)}',
                             0, dashboard_lines.DASHBOARD_WARNING)
 
-        if len_last_channels_frame > 10:
+        if len(last_channels_frame) > 10:
             sync_byte, length, channels = parse_channels(last_channels_frame)
 
             if len(channels) < 16:
