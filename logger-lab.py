@@ -77,8 +77,9 @@ def parse_channels(frame):
 def dashboard(screen):
     global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame
     while True:
-        if len(last_channels_frame) < 10:
-            screen.print_at(f'len(last_channels_frame) is low', 0, 10)
+        len_last_channels_frame = len(last_channels_frame)
+        if len_last_channels_frame < 10:
+            screen.print_at(f'len(last_channels_frame) is low: {len_last_channels_frame}', 0, 10)
         else:
             sync_byte, length, frame_type, channels = parse_channels(last_channels_frame)
 
