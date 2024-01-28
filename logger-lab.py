@@ -43,25 +43,26 @@ def monitor_serial():
             pos = 0
             for byte in values:
                 if byte == SYNC_BYTE:
-                    if len(frame) < pos+1 + 1:
-                        values_rest = frame[pos:len(frame)]
-                        continue  # no length byte
-                    length = frame[pos + 1]
 
-                    if len(frame) < pos + length:
-                        values_rest = frame[pos:len(frame)]
+                    if last_read_size < pos+1 + 1:
+                        values_rest = values[pos:last_read_size]
+                        continue  # no length byte
+                    length = values[pos + 1]
+
+                    if last_read_size < pos + length:
+                        values_rest = values[pos:last_read_size]
                         continue  # not a full frame length
 
-                    frame_type = frame[pos + 2]  # 0x16 = channels
+                    frame_type = values[pos + 2]  # 0x16 = channels
                     if frame_type != FRAME_TYPE_RC_CHANNELS_PACKED:
                         continue
 
-                    frame = values[pos:pos + FRAME_SIZE]
-                    if len(frame) < FRAME_SIZE:
+                    frame = values[pos:pos + length]
+                    last_actual_frame_size = len(frame)
+                    if last_actual_frame_size < length:
                         values_rest = frame
                         continue
 
-                    last_actual_frame_size = len(frame)
                     total_frames += 1
                     # print(f'iteration {iteration:05d}; sync {total_frames} found on {pos}, '
                     #       f'frame size {last_actual_frame_size}, total size {last_read_size}')
