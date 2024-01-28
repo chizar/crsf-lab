@@ -7,6 +7,9 @@ from construct import (
     BitsInteger,
     ByteSwapped
 )
+
+print(0x27)
+print("---")
 #
 # GPS = 0x02
 # BATTERY_SENSOR = 0x08

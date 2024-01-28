@@ -28,10 +28,11 @@ total_frames = 0
 last_read_size = 0
 last_rest_size = 0
 last_actual_frame_size = 0
+frame_types = [0, 0, 0, 0, 0]
 
 
 def monitor_serial():
-    global args, serial_iterations, total_frames, last_read_size, last_rest_size, last_actual_frame_size, last_channels_frame, last_frame_type
+    global args, serial_iterations, total_frames, last_read_size, last_rest_size, last_actual_frame_size, last_channels_frame, last_frame_type, frame_types
     values_rest = b""
 
     with Serial(args.port, args.baud, timeout=args.timeout) as ser:
@@ -54,6 +55,11 @@ def monitor_serial():
                         total_frames += 1
                         if frame[1] > 1:  # size is greater than 1
                             last_frame_type = frame[2]
+
+                            if frame_types[0] != last_frame_type:
+                                frame_types.insert(0, last_frame_type)
+                                frame_types = frame_types[0, 5]
+
                             if last_frame_type == FRAME_TYPE_RC_CHANNELS_PACKED:
                                 last_channels_frame = frame
                 pos += 1
@@ -99,7 +105,7 @@ def dashboard(screen):
 
         screen.print_at(f'serial iterations: {serial_iterations}', 0, dashboard_lines.DASHBOARD_SERIAL_ITERATIONS)
         screen.print_at(f'total frames: {total_frames}', 0, dashboard_lines.DASHBOARD_TOTAL_FRAMES)
-        screen.print_at(f'last frame type: {last_frame_type}', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
+        screen.print_at(f'last frame type: {frame_types}', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
         screen.print_at(f'dashboard iterations: {dashboard_iterations}', 0, dashboard_lines.DASHBOARD_ITERATIONS)
         screen.print_at(f'len(last_channels_frame): {len_local_last_channels_frame}',
                         0, dashboard_lines.DASHBOARD_LAST_CHANNELS_FRAME_LEN)
