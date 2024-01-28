@@ -28,7 +28,7 @@ total_frames = 0
 last_read_size = 0
 last_rest_size = 0
 last_actual_frame_size = 0
-frame_types = [0, 0, 0, 0, 0]
+frame_types = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 
 def monitor_serial():
