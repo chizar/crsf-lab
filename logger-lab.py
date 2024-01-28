@@ -15,7 +15,6 @@ parser.add_argument('-b', '--baud', default=425000, type=int)
 parser.add_argument('-t', '--timeout', default=1, type=int)
 parser.add_argument('-ss', '--serialsize', default=200, type=int)
 parser.add_argument('-p', '--port', default="/dev/ttyS0", type=str)
-
 args = parser.parse_args()
 
 SYNC_BYTE = 0xC8
@@ -93,6 +92,7 @@ def dashboard(screen):
         screen.print_at(f'dashboard iterations: {dashboard_iterations}', 0, dashboard_lines.DASHBOARD_ITERATIONS)
         screen.print_at(f'len(last_channels_frame): {len_local_last_channels_frame}',
                         0, dashboard_lines.DASHBOARD_LAST_CHANNELS_FRAME_LEN)
+        screen.print_at(f'last read size: {last_read_size}', 0, dashboard_lines.DASHBOARD_LAST_READ_SIZE)
         screen.refresh()
         time.sleep(0.100)
 
