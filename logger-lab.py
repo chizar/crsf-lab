@@ -31,7 +31,7 @@ last_actual_frame_size = 0
 
 
 def monitor_serial():
-    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame
+    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
     values_rest = b""
 
     with Serial(args.port, args.baud, timeout=args.timeout) as ser:
