@@ -49,9 +49,10 @@ def monitor_serial():
                     frame, values_rest = extract_frame(values, pos)
                     if frame is not None:
                         total_frames += 1
-                        last_frame_type = frame[2]
-                        if last_frame_type == FRAME_TYPE_RC_CHANNELS_PACKED:
-                            last_channels_frame = frame
+                        if frame[1] > 1:  # size is greater than 1
+                            last_frame_type = frame[2]
+                            if last_frame_type == FRAME_TYPE_RC_CHANNELS_PACKED:
+                                last_channels_frame = frame
                 pos += 1
 
 
