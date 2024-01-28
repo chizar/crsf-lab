@@ -108,13 +108,13 @@ def dashboard(screen):
                 screen.print_at(f'channels:{channels}'
                                 , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
 
-            screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
-            screen.print_at(f'last payload length: {length:05d} ', 0, dashboard_lines.DASHBOARD_LAST_PAYLOAD_LENGTH)
+            screen.print_at(f'last sync byte: {sync_byte:05d}', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
+            screen.print_at(f'last payload length: {length:05d}', 0, dashboard_lines.DASHBOARD_LAST_PAYLOAD_LENGTH)
 
-        screen.print_at(f'serial iterations: {iteration} ', 0, dashboard_lines.DASHBOARD_SERIAL_ITERATIONS)
-        screen.print_at(f'total frames: {total_frames} ', 0, dashboard_lines.DASHBOARD_TOTAL_FRAMES)
-        screen.print_at(f'last frame type: {last_frame_type} ', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
-        screen.print_at(f'dashboard iterations: {dashboard_iterations} ', 0, dashboard_lines.DASHBOARD_ITERATIONS)
+        screen.print_at(f'serial iterations: {iteration}', 0, dashboard_lines.DASHBOARD_SERIAL_ITERATIONS)
+        screen.print_at(f'total frames: {total_frames}', 0, dashboard_lines.DASHBOARD_TOTAL_FRAMES)
+        # screen.print_at(f'last frame type: {last_frame_type}', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
+        screen.print_at(f'dashboard iterations: {dashboard_iterations}', 0, dashboard_lines.DASHBOARD_ITERATIONS)
         screen.print_at(f'len(last_channels_frame): {len_local_last_channels_frame}',
                         0, dashboard_lines.DASHBOARD_LAST_CHANNELS_FRAME_LEN)
         screen.refresh()
