@@ -6,8 +6,9 @@ from threading import Thread
 
 from asciimatics.screen import Screen
 from serial import Serial
-from parse_frame import extract_frame, parse_channels_frame
+
 import dashboard_lines
+from parse_frame import extract_frame, parse_channels_frame
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--baud', default=425000, type=int)
@@ -82,9 +83,6 @@ def dashboard(screen):
                                 f'CH14:{channels[13]:05d} '
                                 f'CH15:{channels[14]:05d} '
                                 f'CH16:{channels[15]:05d}'
-                                , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
-            else:
-                screen.print_at(f'channels:{channels}'
                                 , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
 
             screen.print_at(f'last sync byte: {sync_byte}', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
