@@ -82,6 +82,8 @@ def dashboard(screen):
     while True:
 
         channels = list(parse_channels(last_frame))
+        if len(channels) < 16:
+            continue
         screen.print_at(f'CH01:{channels[0]:05d} '
                         f'CH02:{channels[1]:05d} '
                         f'CH03:{channels[2]:05d} '
