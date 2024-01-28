@@ -83,10 +83,6 @@ def dashboard(screen):
         local_last_channels_frame = last_channels_frame
         len_local_last_channels_frame = len(local_last_channels_frame)
 
-        if len_local_last_channels_frame == 0:
-            screen.print_at(f'len(last_channels_frame) is low: {len_local_last_channels_frame}',
-                            0, dashboard_lines.DASHBOARD_WARNING)
-
         if len_local_last_channels_frame > 0:
             sync_byte, length, channels = parse_channels(local_last_channels_frame)
 
@@ -119,7 +115,8 @@ def dashboard(screen):
         screen.print_at(f'total frames: {total_frames} ', 0, dashboard_lines.DASHBOARD_TOTAL_FRAMES)
         screen.print_at(f'last frame type: {last_frame_type} ', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
         screen.print_at(f'dashboard iterations: {dashboard_iterations} ', 0, dashboard_lines.DASHBOARD_ITERATIONS)
-
+        screen.print_at(f'len(last_channels_frame): {len_local_last_channels_frame}',
+                        0, dashboard_lines.DASHBOARD_LAST_CHANNELS_FRAME_LEN)
         screen.refresh()
         time.sleep(0.100)
 
