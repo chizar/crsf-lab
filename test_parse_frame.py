@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from parse_frame import extract_frame
+from parse_frame import extract_frame, parse_channels_frame
 
 
 class Test(TestCase):
@@ -33,3 +33,10 @@ class Test(TestCase):
         frame, rest = extract_frame(buffer, pos)
         self.assertEqual(None, frame)
         self.assertEqual(b"\xc8\x18\x16\xe0\x03", rest)
+
+    def test_parse_channels_frame(self):
+        buffer = bytearray(b"\xc8\x18\x16\xe0\x03\x9f+\xc0\xf7\x8b_\xfc\xe2\x17\xbf\xf8E\xf9\xca\x07\x00\x00\x0c|\xe2'")
+        sync_byte, length, channels = parse_channels_frame(buffer)
+        self.assertEqual(0xC8, sync_byte)
+        self.assertEqual(24, length)
+        self.assertEqual(16, len(channels))

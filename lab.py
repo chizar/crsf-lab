@@ -7,34 +7,34 @@ from construct import (
     BitsInteger,
     ByteSwapped
 )
-
-GPS = 0x02
-BATTERY_SENSOR = 0x08
-HEARTBEAT = 0x0B
-VIDEO_TRANSMITTER = 0x0F
-LINK_STATISTICS = 0x14
-RC_CHANNELS_PACKED = 0x16
-ATTITUDE = 0x1E
-print(GPS)
-print(BATTERY_SENSOR)
-print(HEARTBEAT)
-print(VIDEO_TRANSMITTER)
-print(LINK_STATISTICS)
-print(RC_CHANNELS_PACKED)
-print(ATTITUDE)
+#
+# GPS = 0x02
+# BATTERY_SENSOR = 0x08
+# HEARTBEAT = 0x0B
+# VIDEO_TRANSMITTER = 0x0F
+# LINK_STATISTICS = 0x14
+# RC_CHANNELS_PACKED = 0x16
+# ATTITUDE = 0x1E
+# print(GPS)
+# print(BATTERY_SENSOR)
+# print(HEARTBEAT)
+# print(VIDEO_TRANSMITTER)
+# print(LINK_STATISTICS)
+# print(RC_CHANNELS_PACKED)
+# print(ATTITUDE)
 
 #
 # payload_rc_channels_packed = ByteSwapped(
 #     BitStruct("channels" / Array(16, BitsInteger(11)))
 # )
 #
-# buffer = bytearray(b"\xc8\x18\x16\xe0\x03\x9f+\xc0\xf7\x8b_\xfc\xe2\x17\xbf\xf8E\xf9\xca\x07\x00\x00\x0c|\xe2'")
+buffer = bytearray(b"\xc8\x18\x16\xe0\x03\x9f+\xc0\xf7\x8b_\xfc\xe2\x17\xbf\xf8E\xf9\xca\x07\x00\x00\x0c|\xe2'")
 # sync_byte = buffer[0]
 # length = buffer[1]
 # frame_type = buffer[2]  # 0x16 = channels
 # # channels = buffer[3:19]
 #
-# channels = buffer[3:25]
+channels = buffer[3:25]
 # start = time.time()
 # for i in range(0, 10000):
 #     parsed_channels = payload_rc_channels_packed.parse(channels)
@@ -48,33 +48,33 @@ print(ATTITUDE)
 #
 #
 #
-# def unpack(data, bitlen):
-#     mask = (1 << bitlen) - 1
-#     for chunk in zip(*[iter(data)] * bitlen):
-#         n = int.from_bytes(chunk, 'big')
-#         a = []
-#         for i in range(8):
-#             a.append(n & mask)
-#             n >>= bitlen
-#         yield from reversed(a)
-#
-#
-# def parse_channels(data):
-#     swapped = data[::-1]
-#     return unpack(swapped, 11)
+def unpack(data, bitlen):
+    mask = (1 << bitlen) - 1
+    for chunk in zip(*[iter(data)] * bitlen):
+        n = int.from_bytes(chunk, 'big')
+        a = []
+        for i in range(8):
+            a.append(n & mask)
+            n >>= bitlen
+        yield from reversed(a)
+
+
+def parse_channels(data):
+    swapped = data[::-1]
+    return unpack(swapped, 11)
 #
 #
 # # print(f'frame length {length}, actual length {actual_length}')
 #
-# start = time.time()
-# for i in range(0, 10000):
-#     unpacked = parse_channels(channels)
-# end = time.time()
-# print(f'took {end-start}')
+start = time.time()
+for i in range(0, 10000):
+    unpacked = parse_channels(channels)
+end = time.time()
+print(f'took {end-start}')
 #
 #
 #
-# print(list(unpacked))
+print(list(unpacked))
 # #
 # # for i in range(0, 16):
 # #
