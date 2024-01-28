@@ -6,7 +6,7 @@ from threading import Thread
 
 from asciimatics.screen import Screen
 from serial import Serial
-from parse_frame import extract_frame
+from parse_frame import extract_frame, parse_channels_frame
 import dashboard_lines
 
 parser = argparse.ArgumentParser()
@@ -63,7 +63,7 @@ def dashboard(screen):
         len_local_last_channels_frame = len(local_last_channels_frame)
 
         if len_local_last_channels_frame > 0:
-            sync_byte, length, channels = parse_channels(local_last_channels_frame)
+            sync_byte, length, channels = parse_channels_frame(local_last_channels_frame)
 
             if len(channels) == 16:
                 screen.print_at(f'CH01:{channels[0]:05d} '
