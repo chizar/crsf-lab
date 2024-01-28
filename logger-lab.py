@@ -90,23 +90,27 @@ def dashboard(screen):
         if len_local_last_channels_frame > 0:
             sync_byte, length, channels = parse_channels(local_last_channels_frame)
 
-            screen.print_at(f'CH01:{channels[0]:05d} '
-                            f'CH02:{channels[1]:05d} '
-                            f'CH03:{channels[2]:05d} '
-                            f'CH04:{channels[3]:05d} '
-                            f'CH05:{channels[4]:05d} '
-                            f'CH06:{channels[5]:05d} '
-                            f'CH07:{channels[6]:05d} '
-                            f'CH08:{channels[7]:05d} '
-                            f'CH09:{channels[8]:05d} '
-                            f'CH10:{channels[9]:05d} '
-                            f'CH11:{channels[10]:05d} '
-                            f'CH12:{channels[11]:05d} '
-                            f'CH13:{channels[12]:05d} '
-                            f'CH14:{channels[13]:05d} '
-                            f'CH15:{channels[14]:05d} '
-                            f'CH16:{channels[15]:05d}'
-                            , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
+            if len(channels) == 16:
+                screen.print_at(f'CH01:{channels[0]:05d} '
+                                f'CH02:{channels[1]:05d} '
+                                f'CH03:{channels[2]:05d} '
+                                f'CH04:{channels[3]:05d} '
+                                f'CH05:{channels[4]:05d} '
+                                f'CH06:{channels[5]:05d} '
+                                f'CH07:{channels[6]:05d} '
+                                f'CH08:{channels[7]:05d} '
+                                f'CH09:{channels[8]:05d} '
+                                f'CH10:{channels[9]:05d} '
+                                f'CH11:{channels[10]:05d} '
+                                f'CH12:{channels[11]:05d} '
+                                f'CH13:{channels[12]:05d} '
+                                f'CH14:{channels[13]:05d} '
+                                f'CH15:{channels[14]:05d} '
+                                f'CH16:{channels[15]:05d}'
+                                , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
+            else:
+                screen.print_at(f'channels:{channels}'
+                                , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
 
             screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
             screen.print_at(f'last payload length: {length:05d} ', 0, dashboard_lines.DASHBOARD_LAST_PAYLOAD_LENGTH)
