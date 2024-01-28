@@ -15,7 +15,7 @@ args = parser.parse_args()
 SYNC_BYTE = 0xC8
 FRAME_SIZE = 26
 
-iteration = 0
+serial_iterations = 0
 last_pos = 0
 
 valuesRest = b""
@@ -24,7 +24,7 @@ with Serial(args.port, args.baud, timeout=args.timeout) as ser:
     inputByteArray = bytearray()
     total = 0
     while True:
-        iteration += 1
+        serial_iterations += 1
         values = valuesRest + ser.read(args.serialsize)
 
         size = len(values)
@@ -40,6 +40,6 @@ with Serial(args.port, args.baud, timeout=args.timeout) as ser:
                 frame_size = len(frame)
                 last_pos = pos
                 total += 1
-                print(f'iteration {iteration:05d}; sync {total} found on {pos}, frame size {frame_size}, total size {size}')
+                print(f'iteration {serial_iterations:05d}; sync {total} found on {pos}, frame size {frame_size}, total size {size}')
                 print(frame)
             pos += 1

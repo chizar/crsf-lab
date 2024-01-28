@@ -19,11 +19,9 @@ parser.add_argument('-p', '--port', default="/dev/ttyS0", type=str)
 args = parser.parse_args()
 
 SYNC_BYTE = 0xC8
-FRAME_SIZE = 26
 FRAME_TYPE_RC_CHANNELS_PACKED = 0x16
 
-iteration = 0
-
+serial_iterations = 0
 last_channels_frame = bytearray()
 last_frame_type = 0
 total_frames = 0
@@ -32,13 +30,13 @@ last_actual_frame_size = 0
 
 
 def monitor_serial():
-    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
+    global args, serial_iterations, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
     values_rest = b""
 
     with Serial(args.port, args.baud, timeout=args.timeout) as ser:
 
         while True:
-            iteration += 1
+            serial_iterations += 1
             values = values_rest + ser.read(args.serialsize)
             values_rest = b""
 
@@ -57,7 +55,7 @@ def monitor_serial():
 
 
 def dashboard(screen):
-    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
+    global args, serial_iterations, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
     dashboard_iterations = 0
     while True:
         dashboard_iterations += 1
@@ -89,7 +87,7 @@ def dashboard(screen):
             screen.print_at(f'last sync byte: {sync_byte}', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
             screen.print_at(f'last payload length: {length}', 0, dashboard_lines.DASHBOARD_LAST_PAYLOAD_LENGTH)
 
-        screen.print_at(f'serial iterations: {iteration}', 0, dashboard_lines.DASHBOARD_SERIAL_ITERATIONS)
+        screen.print_at(f'serial iterations: {serial_iterations}', 0, dashboard_lines.DASHBOARD_SERIAL_ITERATIONS)
         screen.print_at(f'total frames: {total_frames}', 0, dashboard_lines.DASHBOARD_TOTAL_FRAMES)
         screen.print_at(f'last frame type: {last_frame_type}', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
         screen.print_at(f'dashboard iterations: {dashboard_iterations}', 0, dashboard_lines.DASHBOARD_ITERATIONS)
