@@ -6,6 +6,7 @@ from threading import Thread
 
 from asciimatics.screen import Screen
 from serial import Serial
+from parse_frame import extract_frame
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--baud', default=425000, type=int)
@@ -22,14 +23,14 @@ FRAME_TYPE_RC_CHANNELS_PACKED = 0x16
 iteration = 0
 
 
-last_frame = bytearray()
+last_channels_frame = bytearray()
 total_frames = 0
 last_read_size = 0
 last_actual_frame_size = 0
 
 
 def monitor_serial():
-    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_frame
+    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame
     values_rest = b""
 
     with Serial(args.port, args.baud, timeout=args.timeout) as ser:
@@ -43,31 +44,11 @@ def monitor_serial():
             pos = 0
             for byte in values:
                 if byte == SYNC_BYTE:
-
-                    if last_read_size < pos+1 + 1:
-                        values_rest = values[pos:last_read_size]
-                        continue  # no length byte
-                    length = values[pos + 1]
-
-                    if last_read_size < pos + length:
-                        values_rest = values[pos:last_read_size]
-                        continue  # not a full frame length
-
-                    frame_type = values[pos + 2]  # 0x16 = channels
-                    if frame_type != FRAME_TYPE_RC_CHANNELS_PACKED:
-                        continue
-
-                    frame = values[pos:pos + length]
-                    last_actual_frame_size = len(frame)
-                    if last_actual_frame_size < length:
-                        values_rest = frame
-                        continue
-
-                    total_frames += 1
-                    # print(f'iteration {iteration:05d}; sync {total_frames} found on {pos}, '
-                    #       f'frame size {last_actual_frame_size}, total size {last_read_size}')
-                    # print(frame)
-                    last_frame = frame
+                    frame, values_rest = extract_frame(values, pos)
+                    if frame is not None:
+                        total_frames += 1
+                        if frame[2] == FRAME_TYPE_RC_CHANNELS_PACKED:
+                            last_channels_frame = frame
                 pos += 1
 
 
@@ -94,12 +75,12 @@ def parse_channels(frame):
 
 
 def dashboard(screen):
-    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_frame
+    global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame
     while True:
-        if len(last_frame) < 10:
+        if len(last_channels_frame) < 10:
             continue
 
-        sync_byte, length, frame_type, channels = parse_channels(last_frame)
+        sync_byte, length, frame_type, channels = parse_channels(last_channels_frame)
 
         if len(channels) < 16:
             continue
