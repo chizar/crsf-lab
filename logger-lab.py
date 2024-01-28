@@ -77,7 +77,10 @@ def parse_channels(frame):
 
 def dashboard(screen):
     global args, iteration, total_frames, last_read_size, last_actual_frame_size, last_channels_frame, last_frame_type
+    dashboard_iterations = 0
     while True:
+        dashboard_iterations += 1
+
         len_last_channels_frame = len(last_channels_frame)
         if len_last_channels_frame < 10:
             screen.print_at(f'len(last_channels_frame) is low: {len_last_channels_frame}',
@@ -110,9 +113,10 @@ def dashboard(screen):
             screen.print_at(f'last sync byte: {sync_byte:05d} ', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
             screen.print_at(f'last payload length: {length:05d} ', 0, dashboard_lines.DASHBOARD_LAST_PAYLOAD_LENGTH)
 
-        screen.print_at(f'total iterations: {iteration} ', 0, dashboard_lines.DASHBOARD_TOTAL_ITERATIONS)
+        screen.print_at(f'serial iterations: {iteration} ', 0, dashboard_lines.DASHBOARD_SERIAL_ITERATIONS)
         screen.print_at(f'total frames: {total_frames} ', 0, dashboard_lines.DASHBOARD_TOTAL_FRAMES)
         screen.print_at(f'last frame type: {last_frame_type} ', 0, dashboard_lines.DASHBOARD_LAST_FRAME_TYPE)
+        screen.print_at(f'dashboard iterations: {dashboard_iterations} ', 0, dashboard_lines.DASHBOARD_ITERATIONS)
 
         screen.refresh()
         time.sleep(0.100)
