@@ -75,6 +75,7 @@ def dashboard(screen):
         len_local_last_altitude_frame = len(local_last_altitude_frame)
 
         if len_local_last_altitude_frame > 0:
+            print(local_last_altitude_frame)
             sync_byte, length, crc, altitude = parse_altitude_frame(local_last_altitude_frame)
             actual_crc = frame_crc(local_last_altitude_frame)
             if actual_crc != crc:
@@ -82,8 +83,6 @@ def dashboard(screen):
 
             screen.print_at(altitude
                             , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
-
-            print(altitude)
 
 
             screen.print_at(f'last sync byte: {sync_byte}', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
