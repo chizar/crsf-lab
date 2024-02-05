@@ -39,11 +39,11 @@ def parse_channels_frame(frame):
 
 
 def parse_altitude_frame(frame):
-    payload_altitude_packed = ByteSwapped(Struct(
+    payload_altitude_packed = Struct(
         "pitch" / Int16ub,
         "roll" / Int16ub,
         "yaw" / Int16ub
-    ))
+    )
 
     sync_byte = frame[0]
     length = frame[1]
