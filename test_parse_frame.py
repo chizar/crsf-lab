@@ -59,15 +59,13 @@ class Test(TestCase):
         self.assertEqual(8, length)
         self.assertEqual(194, crc)
 
+        self.assertEqual(63582, altitude.pitch)
+        self.assertEqual(364.29802530008004, math.degrees(altitude.pitch/10000))
 
+        self.assertEqual(63233, altitude.roll)
+        self.assertEqual(362.2984025950734, math.degrees(altitude.roll/10000))
 
-        self.assertEqual(-1.1787109375, altitude.pitch)
-        self.assertEqual(-67.53516198465856, math.degrees(altitude.pitch))
-
-        self.assertEqual(2.9981136322021484e-05, altitude.roll)
-        self.assertEqual(0.0017177925762582068, math.degrees(altitude.roll))
-
-        self.assertEqual(446.0, altitude.yaw)
-        self.assertEqual(25553.917662834716, math.degrees(altitude.yaw))
+        self.assertEqual(47036, altitude.yaw)
+        self.assertEqual(269.496428517734, math.degrees(altitude.yaw / 10000))
 
 
