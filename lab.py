@@ -8,7 +8,7 @@ from construct import (
     ByteSwapped
 )
 
-print(0x27)
+print(0x1E)
 print("---")
 #
 # GPS = 0x02

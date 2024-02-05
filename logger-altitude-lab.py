@@ -82,7 +82,8 @@ def dashboard(screen):
 
             screen.print_at(altitude
                             , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
-            # TODO log altitude data
+
+            print(altitude)
 
 
             screen.print_at(f'last sync byte: {sync_byte}', 0, dashboard_lines.DASHBOARD_LAST_SYNC_BYTE)
