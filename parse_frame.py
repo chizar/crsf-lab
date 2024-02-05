@@ -1,4 +1,4 @@
-from construct import ByteSwapped, BitStruct, Array, BitsInteger, Struct, Int16ub, Float16b
+from construct import ByteSwapped, Struct, Int16ub
 
 
 def extract_frame(buffer, pos):
@@ -40,9 +40,9 @@ def parse_channels_frame(frame):
 
 def parse_altitude_frame(frame):
     payload_altitude_packed = ByteSwapped(Struct(
-        "pitch" / Float16b,
-        "roll" / Float16b,
-        "yaw" / Float16b
+        "pitch" / Int16ub,
+        "roll" / Int16ub,
+        "yaw" / Int16ub
     ))
 
     sync_byte = frame[0]
