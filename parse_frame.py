@@ -1,4 +1,4 @@
-from construct import ByteSwapped, BitStruct, Array, BitsInteger, Struct, Int16ub
+from construct import ByteSwapped, BitStruct, Array, BitsInteger, Struct, Int16ub, Float16b
 
 
 def extract_frame(buffer, pos):
@@ -39,11 +39,11 @@ def parse_channels_frame(frame):
 
 
 def parse_altitude_frame(frame):
-    payload_altitude_packed = Struct(
-        "pitch" / Int16ub,
-        "roll" / Int16ub,
-        "yaw" / Int16ub
-    )
+    payload_altitude_packed = ByteSwapped(Struct(
+        "pitch" / Float16b,
+        "roll" / Float16b,
+        "yaw" / Float16b
+    ))
 
     sync_byte = frame[0]
     length = frame[1]
@@ -51,6 +51,4 @@ def parse_altitude_frame(frame):
 
     payload = frame[3:length+1]
     altitude = payload_altitude_packed.parse(payload)
-    # swapped = payload[::-1]
-    # altitude = unpack_int(swapped, 16)
     return [sync_byte, length, crc, altitude]

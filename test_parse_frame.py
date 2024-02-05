@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from parse_frame import extract_frame, parse_channels_frame, parse_altitude_frame
+import math
 
 
 class Test(TestCase):
@@ -57,7 +58,16 @@ class Test(TestCase):
         self.assertEqual(0xC8, sync_byte)
         self.assertEqual(8, length)
         self.assertEqual(194, crc)
-        self.assertEqual(63582, altitude.pitch)
-        self.assertEqual(63233, altitude.roll)
-        self.assertEqual(47036, altitude.yaw)
+
+
+
+        self.assertEqual(-1.1787109375, altitude.pitch)
+        self.assertEqual(-67.53516198465856, math.degrees(altitude.pitch))
+
+        self.assertEqual(2.9981136322021484e-05, altitude.roll)
+        self.assertEqual(0.0017177925762582068, math.degrees(altitude.roll))
+
+        self.assertEqual(446.0, altitude.yaw)
+        self.assertEqual(25553.917662834716, math.degrees(altitude.yaw))
+
 
