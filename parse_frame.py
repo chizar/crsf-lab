@@ -33,3 +33,14 @@ def parse_channels_frame(frame):
     swapped = payload[::-1]
     channels = unpack(swapped, 11)
     return [sync_byte, length, crc, list(channels)]
+
+
+def parse_altitude_frame(frame):
+    sync_byte = frame[0]
+    length = frame[1]
+    crc = frame[-1]
+
+    payload = frame[3:length+1]
+    # swapped = payload[::-1]
+    # channels = unpack(swapped, 11)
+    return [sync_byte, length, crc, payload]
