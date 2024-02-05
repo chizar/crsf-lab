@@ -80,7 +80,9 @@ def dashboard(screen):
             if actual_crc != crc:
                 crc_errors += 1
 
-            screen.print_at(local_last_altitude_frame
+            screen.print_at(f'PITCH:{altitude.pitch:05d} '
+                            f'ROLL:{altitude.roll:05d} '
+                            f'YAW:{altitude.yaw:05d} '
                             , 0, dashboard_lines.DASHBOARD_CHANNELS_LINE)
 
 

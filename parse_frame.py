@@ -1,3 +1,6 @@
+from construct import ByteSwapped, BitStruct, Array, BitsInteger, Struct, Int16ub
+
+
 def extract_frame(buffer, pos):
     buffer_size = len(buffer)
     if buffer_size < pos + 1 + 1:
@@ -13,7 +16,7 @@ def extract_frame(buffer, pos):
     return [frame, b""]
 
 
-def unpack(data, bitlen):
+def unpack_int(data, bitlen):
     mask = (1 << bitlen) - 1
     for chunk in zip(*[iter(data)] * bitlen):
         n = int.from_bytes(chunk, 'big')
@@ -31,16 +34,23 @@ def parse_channels_frame(frame):
 
     payload = frame[3:length+1]
     swapped = payload[::-1]
-    channels = unpack(swapped, 11)
+    channels = unpack_int(swapped, 11)
     return [sync_byte, length, crc, list(channels)]
 
 
 def parse_altitude_frame(frame):
+    payload_altitude_packed = Struct(
+        "pitch" / Int16ub,
+        "roll" / Int16ub,
+        "yaw" / Int16ub
+    )
+
     sync_byte = frame[0]
     length = frame[1]
     crc = frame[-1]
 
     payload = frame[3:length+1]
+    altitude = payload_altitude_packed.parse(payload)
     # swapped = payload[::-1]
-    # channels = unpack(swapped, 11)
-    return [sync_byte, length, crc, payload]
+    # altitude = unpack_int(swapped, 16)
+    return [sync_byte, length, crc, altitude]

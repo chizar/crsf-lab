@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from parse_frame import extract_frame, parse_channels_frame
+from parse_frame import extract_frame, parse_channels_frame, parse_altitude_frame
 
 
 class Test(TestCase):
@@ -48,3 +48,16 @@ class Test(TestCase):
         self.assertEqual(24, length)
         self.assertEqual(39, crc)
         self.assertEqual(16, len(channels))
+
+    #
+
+    def test_parse_altitude_frame(self):
+        buffer = bytearray(b'\xc8\x08\x1e\xf8^\xf7\x01\xb7\xbc\xc2')
+        sync_byte, length, crc, altitude = parse_altitude_frame(buffer)
+        self.assertEqual(0xC8, sync_byte)
+        self.assertEqual(8, length)
+        self.assertEqual(194, crc)
+        self.assertEqual(63582, altitude.pitch)
+        self.assertEqual(63233, altitude.roll)
+        self.assertEqual(47036, altitude.yaw)
+
